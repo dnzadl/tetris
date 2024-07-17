@@ -5,9 +5,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const highScoresList = document.getElementById('highScores');
     const gameOverMessage = document.getElementById('gameOverMessage');
     const restartButton = document.getElementById('restartButton');
-    const blockBreakSound = document.getElementById('blockBreakSound');
-    const winSound = document.getElementById('winSound');
-    const loseSound = document.getElementById('loseSound');
+    const blockBreakSound = new Audio('block_break.wav');
+    const winSound = new Audio('win_sound.wav');
+    const loseSound = new Audio('lose_sound.wav');
 
     const COLS = 10;
     const ROWS = 20;
