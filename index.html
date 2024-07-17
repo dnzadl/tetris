@@ -14,15 +14,21 @@
             background-color: #000;
             color: #fff;
             font-family: Arial, sans-serif;
+            overflow: hidden; /* Ekran taşmalarını önlemek için eklenen stil */
         }
         #gameCanvas {
             border: 4px solid #175DA9;
             background-color: #111;
+            width: 100%; /* Canvas genişliğini % olarak ayarladık */
+            max-width: 375px; /* Maksimum genişlik */
+            max-height: calc(100vh - 250px); /* Maksimum yükseklik (250px kontrol ve skor alanları için) */
         }
         #controls {
             display: flex;
             justify-content: center;
             margin-top: 10px;
+            width: 100%; /* Kontrolleri genişliğe göre ayarladık */
+            max-width: 375px; /* Maksimum genişlik */
         }
         .control-button {
             width: 50px;
