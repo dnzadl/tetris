@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const highScoresList = document.getElementById('highScores');
     const gameOverMessage = document.getElementById('gameOverMessage');
     const restartButton = document.getElementById('restartButton');
+
     const COLS = 10;
     const ROWS = 20;
     const BLOCK_SIZE = 30;
@@ -102,7 +103,6 @@ document.addEventListener('DOMContentLoaded', () => {
             updateScore();
             if (score >= 2000) {
                 gameOver = true;
-                winSound.play();
                 showGameOverMessage('Tebrikler Başardın!');
                 saveScore();
                 displayScores();
@@ -110,7 +110,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 piece = randomPiece();
                 if (collide(grid, piece)) {
                     gameOver = true;
-                    loseSound.play();
                     showGameOverMessage('Daha çok çabalamalısın!');
                     saveScore();
                     displayScores();
@@ -126,18 +125,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function rotate(matrix) {
-        return matrix[0].map((_, i) => matrix.map(row => row[i])).reverse();
+    function rotate(shape) {
+        const rotatedShape = shape.map((row, y) =>
+            row.map((_, x) => shape[x][shape.length - 1 - y])
+        );
+        return rotatedShape;
     }
 
     function collide(grid, piece) {
-        for (let y = 0; y < piece.shape.length; y++) {
-            for (let x = 0; x < piece.shape[y].length; x++) {
-                if (
-                    piece.shape[y][x] &&
-                    (grid[y + piece.y] && grid[y + piece.y][x + piece.x]) !== 0
-                ) {
-                    return true;
+        const { shape, x, y } = piece;
+        for (let row = 0; row < shape.length; row++) {
+            for (let col = 0; col < shape[row].length; col++) {
+                if (shape[row][col] > 0) {
+                    const newX = x + col;
+                    const newY = y + row;
+                    if (newX < 0 || newX >= COLS || newY >= ROWS || grid[newY][newX]) {
+                        return true;
+                    }
                 }
             }
         }
@@ -145,57 +149,46 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function merge(grid, piece) {
-        piece.shape.forEach((row, y) => {
-            row.forEach((value, x) => {
+        const { shape, x, y } = piece;
+        shape.forEach((row, dy) => {
+            row.forEach((value, dx) => {
                 if (value > 0) {
-                    grid[y + piece.y][x + piece.x] = colors.indexOf(piece.color) + 1;
+                    grid[y + dy][x + dx] = value;
                 }
             });
         });
     }
 
     function clearLines() {
-        let lines = 0;
-        outer: for (let y = grid.length - 1; y >= 0; y--) {
-            for (let x = 0; x < grid[y].length; x++) {
-                if (grid[y][x] === 0) {
-                    continue outer;
-                }
+        let linesCleared = 0;
+        for (let row = ROWS - 1; row >= 0; row--) {
+            if (grid[row].every(cell => cell !== 0)) {
+                grid.splice(row, 1);
+                grid.unshift(new Array(COLS).fill(0));
+                linesCleared++;
+                row++;
             }
-            const row = grid.splice(y, 1)[0].fill(0);
-            grid.unshift(row);
-            lines++;
-            y++;
         }
-        return lines;
+        return linesCleared;
     }
 
     function calculateScore(lines) {
-        if (lines === 1) {
-            return 100;
-        } else if (lines > 1) {
-            return lines * 300;
+        switch (lines) {
+            case 1:
+                return 100;
+            case 2:
+                return 300;
+            case 3:
+                return 500;
+            case 4:
+                return 800;
+            default:
+                return 0;
         }
-        return 0;
     }
 
     function updateScore() {
         scoreDisplay.textContent = `Score: ${score}`;
-    }
-
-    function saveScore() {
-        const scores = JSON.parse(localStorage.getItem('scores')) || [];
-        scores.push(score);
-        scores.sort((a, b) => b - a);
-        if (scores.length > 3) {
-            scores.pop();
-        }
-        localStorage.setItem('scores', JSON.stringify(scores));
-    }
-
-    function displayScores() {
-        const scores = JSON.parse(localStorage.getItem('scores')) || [];
-        highScoresList.innerHTML = scores.map(score => `<li>${score}</li>`).join('');
     }
 
     function showGameOverMessage(message) {
@@ -207,42 +200,53 @@ document.addEventListener('DOMContentLoaded', () => {
     function restartGame() {
         grid = createGrid(ROWS, COLS);
         score = 0;
-        gameOver = false;
+        updateScore();
         piece = randomPiece();
+        gameOver = false;
         gameOverMessage.style.display = 'none';
         restartButton.style.display = 'none';
-        updateScore();
-        displayScores();
+        draw();
     }
 
-    function update() {
-        if (!gameOver) {
-            dropPiece();
-            drawGrid();
-            drawBlock(piece.x, piece.y, piece.shape, piece.color);
-            setTimeout(update, 500);
-        }
+    function saveScore() {
+        const scores = JSON.parse(localStorage.getItem('tetrisScores')) || [];
+        scores.push(score);
+        localStorage.setItem('tetrisScores', JSON.stringify(scores));
+    }
+
+    function displayScores() {
+        const scores = JSON.parse(localStorage.getItem('tetrisScores')) || [];
+        scores.sort((a, b) => b - a); // Sort in descending order
+        const highScores = scores.slice(0, 3); // Get top 3 scores
+        highScoresList.innerHTML = highScores.map((score, index) => `<li>High Score ${index + 1}: ${score}</li>`).join('');
     }
 
     document.addEventListener('keydown', (event) => {
-        if (event.key === 'ArrowLeft') {
-            movePiece(-1);
-        } else if (event.key === 'ArrowRight') {
-            movePiece(1);
-        } else if (event.key === 'ArrowDown') {
-            dropPiece();
-        } else if (event.key === 'ArrowUp') {
-            rotatePiece();
+        if (!gameOver) {
+            if (event.key === 'ArrowLeft') {
+                movePiece(-1);
+            } else if (event.key === 'ArrowRight') {
+                movePiece(1);
+            } else if (event.key === 'ArrowDown') {
+                dropPiece();
+            } else if (event.key === 'ArrowUp') {
+                rotatePiece();
+            }
         }
-        drawGrid();
-        drawBlock(piece.x, piece.y, piece.shape, piece.color);
     });
 
-    document.getElementById('leftButton').addEventListener('click', () => movePiece(-1));
-    document.getElementById('rightButton').addEventListener('click', () => movePiece(1));
-    document.getElementById('downButton').addEventListener('click', () => dropPiece());
-    document.getElementById('rotateButton').addEventListener('click', () => rotatePiece());
+    function draw() {
+        drawGrid();
+        drawBlock(piece.x, piece.y, piece.shape, piece.color);
+        if (!gameOver) {
+            setTimeout(() => {
+                dropPiece();
+                if (!gameOver) {
+                    draw();
+                }
+            }, 500); // Set drop speed here (in milliseconds)
+        }
+    }
 
-    update();
-    displayScores();
+    draw();
 });
