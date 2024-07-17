@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('gameCanvas');
     const context = canvas.getContext('2d');
     const scoreDisplay = document.getElementById('score');
+    const highScoresList = document.getElementById('highScores');
     const blockBreakSound = document.getElementById('blockBreakSound');
     const winSound = document.getElementById('winSound');
     const loseSound = document.getElementById('loseSound');
@@ -11,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const BLOCK_SIZE = 30;
     let score = 0;
     let gameOver = false;
+    let linesCleared = 0;
 
     const colors = ['#FF0D72', '#0DC2FF', '#0DFF72', '#F538FF', '#FF8E0D', '#FFE138', '#3877FF'];
     const shapes = [
@@ -80,11 +82,24 @@ document.addEventListener('DOMContentLoaded', () => {
         if (collide(grid, piece)) {
             piece.y--;
             merge(grid, piece);
-            piece = randomPiece();
-            if (collide(grid, piece)) {
+            const lines = clearLines();
+            score += calculateScore(lines);
+            updateScore();
+            if (score >= 2000) {
                 gameOver = true;
-                loseSound.play();
-                alert('Başaramadın!');
+                winSound.play();
+                alert('Helal Sana Beah!');
+                saveScore();
+                displayScores();
+            } else {
+                piece = randomPiece();
+                if (collide(grid, piece)) {
+                    gameOver = true;
+                    loseSound.play();
+                    alert('Başaramadın!');
+                    saveScore();
+                    displayScores();
+                }
             }
         }
     }
@@ -124,6 +139,52 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function clearLines() {
+        let lines = 0;
+        grid = grid.filter(row => {
+            if (row.every(value => value > 0)) {
+                lines++;
+                return false;
+            }
+            return true;
+        });
+        while (grid.length < ROWS) {
+            grid.unshift(new Array(COLS).fill(0));
+        }
+        if (lines > 0) {
+            blockBreakSound.play();
+        }
+        return lines;
+    }
+
+    function calculateScore(lines) {
+        if (lines === 1) {
+            return 100;
+        } else if (lines > 1) {
+            return lines * 300;
+        }
+        return 0;
+    }
+
+    function updateScore() {
+        scoreDisplay.textContent = score;
+    }
+
+    function saveScore() {
+        const scores = JSON.parse(localStorage.getItem('scores')) || [];
+        scores.push(score);
+        scores.sort((a, b) => b - a);
+        if (scores.length > 3) {
+            scores.pop();
+        }
+        localStorage.setItem('scores', JSON.stringify(scores));
+    }
+
+    function displayScores() {
+        const scores = JSON.parse(localStorage.getItem('scores')) || [];
+        highScoresList.innerHTML = scores.map(score => `<li>${score}</li>`).join('');
+    }
+
     function update() {
         if (!gameOver) {
             dropPiece();
@@ -153,4 +214,5 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('upButton').addEventListener('click', () => rotatePiece());
 
     update();
+    displayScores();
 });
