@@ -1,38 +1,20 @@
-body {
+body, html {
+    height: 100%;
+    margin: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    background-color: #f0f0f0;
-    margin: 0;
-    font-family: Arial, sans-serif;
+    background-color: #333;
 }
 
-#game-container {
-    text-align: center;
+#gameArea {
+    background-color: #000;
+    border: 2px solid #fff;
+    padding: 10px;
 }
 
-#choices {
-    margin-top: 20px;
-}
-
-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #175DA9;
-    color: white;
-    border: none;
-    cursor: pointer;
-    margin: 0 10px;
-}
-
-button:hover {
-    background-color: #0D3D6E;
-}
-
-#result {
-    margin-top: 20px;
-    font-size: 24px;
-    font-weight: bold;
-    color: #175DA9;
+#gameCanvas {
+    background-color: #111;
+    display: block;
+    margin: 0 auto;
 }
