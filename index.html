@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -72,3 +74,20 @@
         }
     </style>
 </head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+    <div id="controls">
+        <button id="leftButton" class="control-button">⬅️</button>
+        <button id="rotateButton" class="control-button">⤴️</button>
+        <button id="rightButton" class="control-button">➡️</button>
+    </div>
+    <div id="downButton" class="control-button">⬇️</div>
+    <div id="scoreboard">
+        <div>Score: <span id="score">0</span></div>
+        <ul id="highScores"></ul>
+        <div id="gameOverMessage"></div>
+        <button id="restartButton">Yeniden Başlat</button>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
