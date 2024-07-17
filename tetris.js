@@ -76,12 +76,18 @@ document.addEventListener('DOMContentLoaded', () => {
         drawShape();
     }
 
-    // Check collision
-    function checkCollision() {
-        return currentShapePosition.some((pos) => {
-            const [x, y] = pos;
-            return y >= ROWS || board[y][x] !== EMPTY;
-        });
+    // Move current shape left
+    function moveLeft() {
+        clearShape();
+        currentShapePosition = currentShapePosition.map((pos) => [pos[0] - 1, pos[1]]);
+        drawShape();
+    }
+
+    // Move current shape right
+    function moveRight() {
+        clearShape();
+        currentShapePosition = currentShapePosition.map((pos) => [pos[0] + 1, pos[1]]);
+        drawShape();
     }
 
     // Rotate current shape
@@ -96,6 +102,14 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
         currentShape.shape = rotatedShape;
+    }
+
+    // Check collision
+    function checkCollision() {
+        return currentShapePosition.some((pos) => {
+            const [x, y] = pos;
+            return y >= ROWS || x < 0 || x >= COLS || board[y][x] !== EMPTY;
+        });
     }
 
     // Game over function
@@ -133,13 +147,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Add key events for controls (using arrow emojis)
     document.addEventListener('keydown', (e) => {
         if (e.key === 'ArrowLeft') {
-            // Move left
+            moveLeft();
         } else if (e.key === 'ArrowRight') {
-            // Move right
+            moveRight();
         } else if (e.key === 'ArrowDown') {
-            // Move down faster
+            moveDown();
         } else if (e.key === 'ArrowUp') {
-            // Rotate
+            rotateShape();
         }
     });
 
