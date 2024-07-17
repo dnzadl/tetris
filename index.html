@@ -32,16 +32,20 @@
     </div>
 
     <div id="controls">
-        <button id="left-button" class="control-button">←</button>
-        <button id="rotate-button" class="control-button">↻</button>
-        <button id="right-button" class="control-button">→</button>
-        <button id="down-button" class="control-button">↓</button>
+        <div id="control-buttons">
+            <button id="rotate-button" class="control-button">↻</button>
+            <div class="control-row">
+                <button id="left-button" class="control-button">←</button>
+                <button id="right-button" class="control-button">→</button>
+            </div>
+            <button id="down-button" class="control-button">↓</button>
+        </div>
     </div>
 
     <div id="scores-screen">
         <h2>High Scores</h2>
         <ul id="scores-list"></ul>
-        <button id="back-button">Back to Start</button>
+        <button id="back-to-start-button">Back to Start</button>
     </div>
 
     <script src="script.js"></script>
