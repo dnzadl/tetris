@@ -48,8 +48,8 @@ button:hover {
 /* Oyun alanı */
 #game-container {
     position: relative;
-    width: 288px; /* Oyun alanını %20 küçültülmüş boyutta */
-    height: 288px; /* Oyun alanını %20 küçültülmüş boyutta */
+    width: 288px; /* %20 küçültülmüş boyut */
+    height: 288px; /* %20 küçültülmüş boyut */
     border: 2px solid #333; /* Oyun alanına çerçeve ekleme */
     box-sizing: border-box;
     margin-top: 20px;
@@ -81,7 +81,6 @@ button:hover {
     position: fixed;
     bottom: 20px;
     left: 20px;
-    align-items: center;
 }
 
 #control-buttons {
@@ -111,17 +110,12 @@ button:hover {
 }
 
 /* Yön tuşları */
-#left-button, #right-button, #down-button, #rotate-button {
-    font-size: 24px;
-}
-
-/* Yön tuşlarının düzeni */
 #rotate-button {
     margin-bottom: 10px;
 }
 
 .control-row {
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 }
 
 #left-button {
