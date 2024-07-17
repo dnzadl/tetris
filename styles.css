@@ -1,69 +1,36 @@
-body {
-    font-family: Arial, sans-serif;
+body, html {
     margin: 0;
     padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f0f0f0;
+    font-family: Arial, sans-serif;
     overflow: hidden;
 }
 
-#start-screen, #game-container, #scores-screen {
+#game-container {
     display: none;
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+}
+
+#tetris-board {
+    background-color: #eee;
+    border: 1px solid #333;
+}
+
+#start-screen, #scores-screen, #player-name-section {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     text-align: center;
 }
 
-canvas {
-    background-color: #ffffff;
-    border: 1px solid #000;
-    display: block;
-    margin: 0 auto;
-}
-
-#score {
-    font-size: 24px;
-    margin: 20px;
-}
-
 button {
-    padding: 10px 20px;
-    font-size: 18px;
     margin: 10px;
-    cursor: pointer;
+    padding: 10px 20px;
 }
 
-#controls {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-}
-
-#controls button {
-    margin: 0 5px;
-}
-
-#game-over-message {
-    font-size: 24px;
-    margin: 20px;
-}
-
-#player-name-section {
-    display: block;
-}
-
-@media (max-width: 600px) {
-    canvas {
-        width: 90vw;
-        height: auto;
-    }
-
-    #score {
-        font-size: 18px;
-    }
-
-    button {
-        font-size: 16px;
-    }
+input {
+    margin: 10px;
+    padding: 10px;
 }
