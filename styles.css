@@ -1,5 +1,3 @@
-/* style.css */
-
 /* Genel stil tanımlamaları */
 body {
     font-family: Arial, sans-serif;
@@ -38,8 +36,8 @@ button:hover {
 /* Oyun alanı */
 #game-container {
     position: relative;
-    width: 70px; /* %30 küçültülmüş boyut */
-    height: 120px; /* %30 küçültülmüş boyut */
+    width: 560px; /* %30 küçültülmüş boyut (800px - 30%) */
+    height: 960px; /* %30 küçültülmüş boyut (1370px - 30%) */
     border: 2px solid #333; /* Oyun alanına çerçeve ekleme */
     box-sizing: border-box;
     background: white;
@@ -60,6 +58,7 @@ button:hover {
     height: 100%;
 }
 
+/* Bilgi kısmı */
 #game-info {
     margin-top: 10px;
 }
@@ -68,7 +67,7 @@ button:hover {
 #controls {
     display: flex;
     flex-direction: column;
-    position: fixed;
+    position: absolute;
     bottom: 20px;
     left: 20px;
     align-items: center;
@@ -100,17 +99,6 @@ button:hover {
     background-color: #218838;
 }
 
-/* Yön tuşları */
-#rotate-button {
-    margin-bottom: 10px;
-}
-
-#game-over-message {
-    color: red;
-    font-size: 18px;
-    margin-top: 20px;
-}
-
 /* Mobil optimizasyon */
 @media (max-width: 600px) {
     button {
@@ -122,4 +110,19 @@ button:hover {
         font-size: 14px;
     }
 
-    #game-o
+    #game-over-message {
+        font-size: 16px;
+    }
+
+    .control-button {
+        font-size: 24px; /* %200 büyütülmüş font boyutu */
+        width: 60px; /* %200 büyütülmüş boyut */
+        height: 60px; /* %200 büyütülmüş boyut */
+        padding: 10px;
+    }
+}
+
+/* Gizli sınıf */
+.hidden {
+    display: none;
+}
