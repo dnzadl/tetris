@@ -3,17 +3,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const context = canvas.getContext('2d');
     const scoreDisplay = document.getElementById('score');
     const highScoresList = document.getElementById('highScores');
+    const gameOverMessage = document.getElementById('gameOverMessage');
+    const restartButton = document.getElementById('restartButton');
     const blockBreakSound = document.getElementById('blockBreakSound');
     const winSound = document.getElementById('winSound');
     const loseSound = document.getElementById('loseSound');
 
-    // Ekran boyutlarını dinamik olarak ayarlamak için değişkenler ekledik
     const screenWidth = window.innerWidth;
     const screenHeight = window.innerHeight;
-
-    // iPhone 11 ekran boyutu 828 x 1792
-    const canvasWidth = screenWidth <= 375 ? screenWidth : 375; // Maksimum 375px genişlik
-    const canvasHeight = screenHeight <= 667 ? screenHeight : 667; // Maksimum 667px yükseklik
+    const canvasWidth = screenWidth <= 375 ? screenWidth : 375;
+    const canvasHeight = screenHeight <= 667 ? screenHeight : 667;
 
     canvas.width = canvasWidth;
     canvas.height = canvasHeight;
@@ -98,7 +97,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (score >= 2000) {
                 gameOver = true;
                 winSound.play();
-                alert('Helal Sana Beah!');
+                gameOverMessage.textContent = 'Helal Sana Beah!';
+                gameOverMessage.style.display = 'block';
+                restartButton.style.display = 'block';
                 saveScore();
                 displayScores();
             } else {
@@ -106,7 +107,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (collide(grid, piece)) {
                     gameOver = true;
                     loseSound.play();
-                    alert('Başaramadın!');
+                    gameOverMessage.textContent = 'Başaramadın!';
+                    gameOverMessage.style.display = 'block';
+                    restartButton.style.display = 'block';
                     saveScore();
                     displayScores();
                 }
@@ -197,6 +200,16 @@ document.addEventListener('DOMContentLoaded', () => {
         highScoresList.innerHTML = scores.map(score => `<li>${score}</li>`).join('');
     }
 
+    function restartGame() {
+        grid = createGrid(ROWS, COLS);
+        score = 0;
+        piece = randomPiece();
+        gameOver = false;
+        gameOverMessage.style.display = 'none';
+        restartButton.style.display = 'none';
+        updateScore();
+    }
+
     function update() {
         if (!gameOver) {
             dropPiece();
@@ -207,23 +220,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     document.addEventListener('keydown', (event) => {
-        if (event.key === 'ArrowLeft') {
-            movePiece(-1);
-        } else if (event.key === 'ArrowRight') {
-            movePiece(1);
-        } else if (event.key === 'ArrowDown') {
-            dropPiece();
-        } else if (event.key === 'ArrowUp') {
-            rotatePiece();
+        if (!gameOver) {
+            if (event.key === 'ArrowLeft') {
+                movePiece(-1);
+            } else if (event.key === 'ArrowRight') {
+                movePiece(1);
+            } else if (event.key === 'ArrowDown') {
+                dropPiece();
+            } else if (event.key === 'ArrowUp') {
+                rotatePiece();
+            }
+            drawGrid();
+            drawBlock(piece.x, piece.y, piece.shape, piece.color);
         }
-        drawGrid();
-        drawBlock(piece.x, piece.y, piece.shape, piece.color);
     });
 
     document.getElementById('leftButton').addEventListener('click', () => movePiece(-1));
     document.getElementById('rightButton').addEventListener('click', () => movePiece(1));
     document.getElementById('downButton').addEventListener('click', () => dropPiece());
     document.getElementById('rotateButton').addEventListener('click', () => rotatePiece());
+    restartButton.addEventListener('click', restartGame);
 
     update();
     displayScores();
