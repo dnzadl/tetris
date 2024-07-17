@@ -10,13 +10,6 @@
     <div id="start-screen">
         <h1>ADL Tetris</h1>
         <button id="start-button">Start Game</button>
-        <button id="scores-button">View Scores</button>
-    </div>
-    
-    <div id="player-name-section">
-        <h2>Enter Your Name</h2>
-        <input type="text" id="player-name" placeholder="Your name">
-        <button id="save-name">Save</button>
     </div>
 
     <div id="game-container">
@@ -25,26 +18,24 @@
         </div>
         <div id="game-info">
             <p id="score">Score: 0</p>
-            <button id="restart-button">Restart Game</button>
-            <button id="back-button">Back to Start</button>
+            <p id="level">Level: 1</p>
+            <p id="lines">Lines: 0</p>
         </div>
-        <div id="game-over-message"></div>
+        <div id="controls">
+            <div id="control-buttons">
+                <div class="control-row">
+                    <button id="rotate-button" class="control-button">↻</button>
+                </div>
+                <div class="control-row">
+                    <button id="left-button" class="control-button">←</button>
+                    <button id="down-button" class="control-button">↓</button>
+                    <button id="right-button" class="control-button">→</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div id="controls">
-        <button id="rotate-button" class="control-button">↻</button>
-        <div class="control-row">
-            <button id="left-button" class="control-button">←</button>
-            <button id="right-button" class="control-button">→</button>
-        </div>
-        <button id="down-button" class="control-button">↓</button>
-    </div>
-
-    <div id="scores-screen">
-        <h2>High Scores</h2>
-        <ul id="scores-list"></ul>
-        <button id="back-to-start-button">Back to Start</button>
-    </div>
+    <div id="game-over-message"></div>
 
     <script src="script.js"></script>
 </body>
