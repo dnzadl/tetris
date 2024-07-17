@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const ROWS = 20;
     const COLS = 10;
-    const BLOCK_SIZE = 30;
+    const BLOCK_SIZE = 30; // Taş boyutu
     const COLORS = ['red', 'orange', 'yellow', 'green', 'blue', 'purple', 'cyan'];
     let board = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
     let currentPiece, score = 0;
@@ -124,121 +124,102 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
         clearLines();
-        newPiece();
+        currentPiece = generatePiece();
+        currentPiece.x = Math.floor(COLS / 2) - 1;
+        currentPiece.y = 0;
+        if (!isValidPosition(currentPiece)) {
+            endGame();
+        }
     }
 
     function clearLines() {
         for (let y = ROWS - 1; y >= 0; y--) {
-            if (board[y].every(cell => cell)) {
+            if (board[y].every(cell => cell !== 0)) {
                 board.splice(y, 1);
                 board.unshift(Array(COLS).fill(0));
                 score += 100;
-                if (intervalId) {
-                    clearInterval(intervalId);
-                    intervalId = setInterval(updateGame, 1000 / 4); // %20 yavaşlatıldı
-                }
+                drawBoard();
             }
         }
         scoreElement.textContent = `Score: ${score}`;
     }
 
-    function newPiece() {
-        currentPiece = { ...generatePiece(), x: Math.floor(COLS / 2) - 1, y: 0 };
-        if (!isValidPosition(currentPiece)) {
-            endGame();
-        }
-        drawGame();
-    }
-
     function drawGame() {
         drawBoard();
-        if (currentPiece) {
-            drawPiece(currentPiece, currentPiece.x, currentPiece.y, COLORS[currentPiece.color - 1]);
-        }
+        drawPiece(currentPiece, currentPiece.x, currentPiece.y, COLORS[currentPiece.color - 1]);
+    }
+
+    function startGame() {
+        gameStarted = true;
+        score = 0;
+        board = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
+        currentPiece = generatePiece();
+        currentPiece.x = Math.floor(COLS / 2) - 1;
+        currentPiece.y = 0;
+        scoreElement.textContent = `Score: ${score}`;
+        gameOverMessage.textContent = '';
+        startScreen.style.display = 'none';
+        scoresScreen.style.display = 'none';
+        gameContainer.style.display = 'block';
+
+        clearInterval(intervalId);
+        intervalId = setInterval(() => movePiece(0, 1), 600); // Speed: 600ms
     }
 
     function endGame() {
         clearInterval(intervalId);
         gameStarted = false;
-        gameOverMessage.textContent = `Game Over! Your Score: ${score}`;
-        gameOverMessage.style.display = 'block';
+        gameOverMessage.textContent = 'Game Over';
         saveScore();
     }
 
     function saveScore() {
-        const scores = JSON.parse(localStorage.getItem('tetrisScores')) || [];
+        let scores = JSON.parse(localStorage.getItem('scores')) || [];
         scores.push({ name: playerName, score });
         scores.sort((a, b) => b.score - a.score);
-        if (scores.length > 5) {
-            scores.pop();
-        }
-        localStorage.setItem('tetrisScores', JSON.stringify(scores));
-        showScoresScreen();
+        scores = scores.slice(0, 5); // Keep top 5 scores
+        localStorage.setItem('scores', JSON.stringify(scores));
     }
 
     function showScoresScreen() {
         startScreen.style.display = 'none';
         gameContainer.style.display = 'none';
-        playerNameSection.style.display = 'none';
         scoresScreen.style.display = 'block';
-        scoresList.innerHTML = '';
-        JSON.parse(localStorage.getItem('tetrisScores') || '[]').forEach(scoreEntry => {
-            const li = document.createElement('li');
-            li.textContent = `${scoreEntry.name}: ${scoreEntry.score}`;
-            scoresList.appendChild(li);
-        });
+        let scores = JSON.parse(localStorage.getItem('scores')) || [];
+        scoresList.innerHTML = scores.map(score => `<li>${score.name}: ${score.score}</li>`).join('');
     }
 
     function showStartScreen() {
         startScreen.style.display = 'block';
         gameContainer.style.display = 'none';
-        playerNameSection.style.display = 'none';
         scoresScreen.style.display = 'none';
-        gameOverMessage.style.display = 'none';
-    }
-
-    function startGame() {
-        if (gameStarted) return;
-        score = 0;
-        board = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
-        drawBoard();
-        newPiece();
-        intervalId = setInterval(updateGame, 1000 / 4); // %20 yavaşlatıldı
-        gameStarted = true;
-        gameContainer.style.display = 'block';
-        startScreen.style.display = 'none';
-    }
-
-    function updateGame() {
-        movePiece(0, 1);
     }
 
     function handleKeyDown(event) {
-        if (gameStarted) {
-            switch (event.key) {
-                case 'ArrowLeft':
-                    movePiece(-1, 0);
-                    break;
-                case 'ArrowRight':
-                    movePiece(1, 0);
-                    break;
-                case 'ArrowDown':
-                    movePiece(0, 1);
-                    break;
-                case 'ArrowUp':
-                    rotatePiece();
-                    break;
-            }
+        if (!gameStarted) return;
+        switch (event.key) {
+            case 'ArrowLeft':
+                movePiece(-1, 0);
+                break;
+            case 'ArrowRight':
+                movePiece(1, 0);
+                break;
+            case 'ArrowDown':
+                movePiece(0, 1);
+                break;
+            case 'ArrowUp':
+                rotatePiece();
+                break;
         }
     }
 
     function handleTouchStart(event) {
-        const touch = event.touches[0];
-        touchStartX = touch.clientX;
-        touchStartY = touch.clientY;
+        touchStartX = event.touches[0].clientX;
+        touchStartY = event.touches[0].clientY;
     }
 
     function handleTouchMove(event) {
+        if (!gameStarted) return;
         const touch = event.touches[0];
         const deltaX = touch.clientX - touchStartX;
         const deltaY = touch.clientY - touchStartY;
@@ -261,7 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
         touchStartY = touch.clientY;
     }
 
-    function handleTouchEnd(event) {
+    function handleTouchEnd() {
         if (gameStarted) {
             movePiece(0, 1); // Move piece down
         }
