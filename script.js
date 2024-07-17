@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const BLOCK_SIZE = 30;
     let score = 0;
     let gameOver = false;
-    let linesCleared = 0;
 
     const colors = ['#FF0D72', '#0DC2FF', '#0DFF72', '#F538FF', '#FF8E0D', '#FFE138', '#3877FF'];
     const shapes = [
@@ -141,15 +140,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function clearLines() {
         let lines = 0;
-        grid = grid.filter(row => {
-            if (row.every(value => value > 0)) {
+        for (let y = grid.length - 1; y >= 0; y--) {
+            if (grid[y].every(value => value > 0)) {
                 lines++;
-                return false;
+                grid.splice(y, 1);
+                grid.unshift(new Array(COLS).fill(0));
             }
-            return true;
-        });
-        while (grid.length < ROWS) {
-            grid.unshift(new Array(COLS).fill(0));
         }
         if (lines > 0) {
             blockBreakSound.play();
