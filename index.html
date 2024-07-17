@@ -41,6 +41,7 @@
             color: #fff;
             font-size: 24px;
             border-radius: 5px;
+            cursor: pointer; /* İmleç el olduğunda butonlara tıklanabilir olduğunu belirtir */
         }
         #scoreboard {
             margin-top: 10px;
@@ -69,7 +70,7 @@
             color: #fff;
             border: none;
             border-radius: 5px;
-            cursor: pointer;
+            cursor: pointer; /* İmleç el olduğunda butona tıklanabilir olduğunu belirtir */
         }
     </style>
 </head>
@@ -87,6 +88,9 @@
         <div id="gameOverMessage"></div>
         <button id="restartButton">Yeniden Başlat</button>
     </div>
-    <script src="script.js"></script>
+    <audio id="blockBreakSound" src="block-break.mp3"></audio>
+    <audio id="winSound" src="win.mp3"></audio>
+    <audio id="loseSound" src="lose.mp3"></audio>
+    <script src="tetris.js"></script>
 </body>
 </html>
