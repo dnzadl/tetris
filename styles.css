@@ -122,14 +122,4 @@ button:hover {
         font-size: 14px;
     }
 
-    #game-over-message {
-        font-size: 16px;
-    }
-
-    .control-button {
-        font-size: 24px; /* %200 büyütülmüş font boyutu */
-        width: 60px; /* %200 büyütülmüş boyut */
-        height: 60px; /* %200 büyütülmüş boyut */
-        padding: 10px;
-    }
-}
+    #game-o
