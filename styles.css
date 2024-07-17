@@ -64,10 +64,13 @@ button:hover {
 
 /* Kontroller */
 #controls {
+    position: fixed;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-top: 20px;
+    justify-content: space-between;
+    width: 250px;
 }
 
 #controls button {
@@ -75,8 +78,8 @@ button:hover {
     margin: 5px;
     padding: 15px;
     font-size: 14px;
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
 }
 
 #controls button:hover {
@@ -121,8 +124,8 @@ button:hover {
 
     #controls button {
         font-size: 12px;
-        width: 50px;
-        height: 50px;
-        padding: 10px;
+        width: 40px;
+        height: 40px;
+        padding: 8px;
     }
 }
