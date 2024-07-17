@@ -1,42 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ADL Tetris</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Tetris Oyunu</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="start-screen">
-        <h1>ADL Tetris</h1>
-        <button id="start-button">Start Game</button>
-    </div>
-
-    <div id="game-container" class="hidden">
-        <div id="game-area">
-            <canvas id="tetris-board"></canvas>
+    <div class="game-container">
+        <div class="game-frame">
+            <canvas id="gameCanvas" width="300" height="600"></canvas>
         </div>
-        <div id="game-info">
-            <p id="score">Score: 0</p>
-            <p id="level">Level: 1</p>
-            <p id="lines">Lines: 0</p>
-        </div>
-        <div id="controls">
-            <div id="control-buttons">
-                <div class="control-row">
-                    <button id="rotate-button" class="control-button">↻</button>
-                </div>
-                <div class="control-row">
-                    <button id="left-button" class="control-button">←</button>
-                    <button id="down-button" class="control-button">↓</button>
-                    <button id="right-button" class="control-button">→</button>
-                </div>
-            </div>
+        <div class="score-board">
+            <h1>Tetris</h1>
+            <p>Puan: <span id="score">0</span></p>
+            <p>Son Skorlar:</p>
+            <ul id="highScores">
+                <!-- Son skorlar burada gösterilecek -->
+            </ul>
         </div>
     </div>
-
-    <div id="game-over-message" class="hidden"></div>
-
+    <div class="controls">
+        <button id="upButton">⬆️</button>
+        <button id="leftButton">⬅️</button>
+        <button id="downButton">⬇️</button>
+        <button id="rightButton">➡️</button>
+        <button id="rotateButton">🔄</button>
+    </div>
+    <audio id="blockBreakSound" src="block_break.mp3" preload="auto"></audio>
+    <audio id="winSound" src="win.mp3" preload="auto"></audio>
+    <audio id="loseSound" src="lose.mp3" preload="auto"></audio>
     <script src="script.js"></script>
 </body>
 </html>
