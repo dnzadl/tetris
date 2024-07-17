@@ -19,16 +19,15 @@
         #gameCanvas {
             border: 4px solid #175DA9;
             background-color: #111;
-            width: 100%;
-            max-width: 375px; /* Max genişlik */
-            max-height: calc(100vh - 250px);
+            max-width: 100%; /* Canvası tam ekran genişliğine sığdırır */
+            max-height: calc(100vh - 200px); /* Canvas yüksekliği ayarlandı */
         }
         #controls {
             display: flex;
             justify-content: center;
             margin-top: 10px;
             width: 100%;
-            max-width: 375px;
+            max-width: 375px; /* Maksimum genişlik */
         }
         .control-button {
             width: 50px;
@@ -75,7 +74,7 @@
     </style>
 </head>
 <body>
-    <canvas id="gameCanvas" width="375" height="667"></canvas>
+    <canvas id="gameCanvas"></canvas>
     <div id="controls">
         <button id="leftButton" class="control-button">⬅️</button>
         <button id="rotateButton" class="control-button">⤴️</button>
