@@ -12,10 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const grid = 30;
     let gameInterval;
     let isGameOver = false;
-
-    // Taşlar, skor ve oyun durumu
-    const pieces = [/* Tetris taşları tanımlamaları */];
-    let piece;
+    let piece = null;
     let score = 0;
     let level = 1;
     let lines = 0;
@@ -30,6 +27,9 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('score').innerText = 'Score: 0';
         document.getElementById('level').innerText = 'Level: 1';
         document.getElementById('lines').innerText = 'Lines: 0';
+        document.getElementById('start-screen').classList.add('hidden');
+        document.getElementById('game-container').classList.remove('hidden');
+        document.getElementById('game-over-message').classList.add('hidden');
         drawBoard();
         gameInterval = setInterval(gameLoop, 1000 / (level * 1.2)); // %20 yavaşlatılmış hız
     }
@@ -39,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isGameOver) {
             clearInterval(gameInterval);
             document.getElementById('game-over-message').innerText = 'Game Over';
+            document.getElementById('game-over-message').classList.remove('hidden');
             return;
         }
 
@@ -51,35 +52,47 @@ document.addEventListener('DOMContentLoaded', () => {
         // Tahtayı ve taşları çizme kodları burada
     }
 
+    // Taşı döndürme fonksiyonu
+    function rotatePiece() {
+        // Taşı döndürme kodu burada
+    }
+
+    // Taşı sola hareket ettirme fonksiyonu
+    function moveLeft() {
+        // Taşı sola hareket ettirme kodu burada
+    }
+
+    // Taşı sağa hareket ettirme fonksiyonu
+    function moveRight() {
+        // Taşı sağa hareket ettirme kodu burada
+    }
+
+    // Taşı aşağı hareket ettirme fonksiyonu
+    function moveDown() {
+        // Taşı aşağı hareket ettirme kodu burada
+    }
+
     // Tuş olayları
     document.getElementById('start-button').addEventListener('click', startGame);
-    document.getElementById('rotate-button').addEventListener('click', () => {
-        // Taşı döndürme kodu burada
-    });
-    document.getElementById('left-button').addEventListener('click', () => {
-        // Taşı sola hareket ettirme kodu burada
-    });
-    document.getElementById('right-button').addEventListener('click', () => {
-        // Taşı sağa hareket ettirme kodu burada
-    });
-    document.getElementById('down-button').addEventListener('click', () => {
-        // Taşı aşağı hareket ettirme kodu burada
-    });
+    document.getElementById('rotate-button').addEventListener('click', rotatePiece);
+    document.getElementById('left-button').addEventListener('click', moveLeft);
+    document.getElementById('right-button').addEventListener('click', moveRight);
+    document.getElementById('down-button').addEventListener('click', moveDown);
 
     // Klavye olayları
     document.addEventListener('keydown', (event) => {
         switch (event.key) {
             case 'ArrowLeft':
-                // Taşı sola hareket ettirme kodu burada
+                moveLeft();
                 break;
             case 'ArrowRight':
-                // Taşı sağa hareket ettirme kodu burada
+                moveRight();
                 break;
             case 'ArrowDown':
-                // Taşı aşağı hareket ettirme kodu burada
+                moveDown();
                 break;
             case 'ArrowUp':
-                // Taşı döndürme kodu burada
+                rotatePiece();
                 break;
         }
     });
