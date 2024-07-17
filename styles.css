@@ -25,13 +25,10 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     let grid = createGrid(ROWS, COLS);
+    let piece = randomPiece();
 
     function createGrid(rows, cols) {
-        const grid = [];
-        for (let row = 0; row < rows; row++) {
-            grid.push(new Array(cols).fill(0));
-        }
-        return grid;
+        return Array.from({ length: rows }, () => Array(cols).fill(0));
     }
 
     function drawGrid() {
@@ -66,8 +63,6 @@ document.addEventListener('DOMContentLoaded', () => {
             y: 0,
         };
     }
-
-    let piece = randomPiece();
 
     function movePiece(dir) {
         piece.x += dir;
@@ -115,24 +110,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function collide(grid, piece) {
-        for (let y = 0; y < piece.shape.length; y++) {
-            for (let x = 0; x < piece.shape[y].length; x++) {
-                if (
-                    piece.shape[y][x] &&
-                    (grid[y + piece.y] && grid[y + piece.y][x + piece.x]) !== 0
-                ) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return piece.shape.some((row, dy) => {
+            return row.some((value, dx) => {
+                const y = piece.y + dy;
+                const x = piece.x + dx;
+                return value > 0 && (grid[y] && grid[y][x]) !== 0;
+            });
+        });
     }
 
     function merge(grid, piece) {
-        piece.shape.forEach((row, y) => {
-            row.forEach((value, x) => {
+        piece.shape.forEach((row, dy) => {
+            row.forEach((value, dx) => {
                 if (value > 0) {
-                    grid[y + piece.y][x + piece.x] = colors.indexOf(piece.color) + 1;
+                    grid[piece.y + dy][piece.x + dx] = colors.indexOf(piece.color) + 1;
                 }
             });
         });
@@ -140,31 +131,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function clearLines() {
         let lines = 0;
-        outer: for (let y = grid.length - 1; y >= 0; y--) {
-            for (let x = 0; x < grid[y].length; x++) {
-                if (grid[y][x] === 0) {
-                    continue outer;
-                }
+        for (let y = grid.length - 1; y >= 0; y--) {
+            if (grid[y].every(value => value !== 0)) {
+                grid.splice(y, 1);
+                grid.unshift(Array(COLS).fill(0));
+                lines++;
+                y++;
             }
-
-            const row = grid.splice(y, 1)[0].fill(0);
-            grid.unshift(row);
-            lines++;
-            y++;
         }
         if (lines > 0) {
+            blockBreakSound.currentTime = 0;
             blockBreakSound.play();
         }
         return lines;
     }
 
     function calculateScore(lines) {
-        if (lines === 1) {
-            return 100;
-        } else if (lines > 1) {
-            return lines * 300;
-        }
-        return 0;
+        return lines === 1 ? 100 : lines * 300;
     }
 
     function updateScore() {
@@ -196,17 +179,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     document.addEventListener('keydown', (event) => {
-        if (event.key === 'ArrowLeft') {
-            movePiece(-1);
-        } else if (event.key === 'ArrowRight') {
-            movePiece(1);
-        } else if (event.key === 'ArrowDown') {
-            dropPiece();
-        } else if (event.key === 'ArrowUp') {
-            rotatePiece();
+        if (!gameOver) {
+            if (event.key === 'ArrowLeft') {
+                movePiece(-1);
+            } else if (event.key === 'ArrowRight') {
+                movePiece(1);
+            } else if (event.key === 'ArrowDown') {
+                dropPiece();
+            } else if (event.key === 'ArrowUp') {
+                rotatePiece();
+            }
+            drawGrid();
+            drawBlock(piece.x, piece.y, piece.shape, piece.color);
         }
-        drawGrid();
-        drawBlock(piece.x, piece.y, piece.shape, piece.color);
     });
 
     document.getElementById('leftButton').addEventListener('click', () => movePiece(-1));
