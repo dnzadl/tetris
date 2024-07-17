@@ -7,9 +7,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const winSound = document.getElementById('winSound');
     const loseSound = document.getElementById('loseSound');
 
+    // Ekran boyutlarını dinamik olarak ayarlamak için değişkenler ekledik
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+
+    // iPhone 11 ekran boyutu 828 x 1792
+    const canvasWidth = screenWidth <= 375 ? screenWidth : 375; // Maksimum 375px genişlik
+    const canvasHeight = screenHeight <= 667 ? screenHeight : 667; // Maksimum 667px yükseklik
+
+    canvas.width = canvasWidth;
+    canvas.height = canvasHeight;
+
     const COLS = 10;
     const ROWS = 20;
-    const BLOCK_SIZE = 30;
+    const BLOCK_SIZE = Math.min(Math.floor(canvasWidth / COLS), Math.floor(canvasHeight / ROWS));
     let score = 0;
     let gameOver = false;
 
