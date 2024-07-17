@@ -114,7 +114,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Game over function
     function gameOver() {
-        // Handle game over logic
         if (score >= 2000) {
             alert("Tebrikler Başardın!");
         } else {
@@ -145,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Add key events for controls (using arrow emojis)
+    // Add key events for controls
     document.addEventListener('keydown', (e) => {
         if (e.key === 'ArrowLeft') {
             moveLeft();
@@ -172,9 +171,32 @@ document.addEventListener('DOMContentLoaded', () => {
     function gameLoop() {
         moveDown();
         if (checkCollision()) {
-            gameOver();
-        } else {
-            setTimeout(gameLoop, 1000); // Drop speed
+            currentShapePosition.forEach((pos) => {
+                const [x, y] = pos;
+                if (y >= 0) {
+                    board[y][x] = currentShape.color;
+                }
+            });
+            checkLines();
+            currentShape = randomShape();
+            currentShapePosition = [[3, 0]]; // Initial position
+            if (checkCollision()) {
+                gameOver();
+            }
+        }
+        drawShape();
+        setTimeout(gameLoop, 1000); // Drop speed
+    }
+
+    // Check and clear full lines
+    function checkLines() {
+        for (let y = ROWS - 1; y >= 0; y--) {
+            if (board[y].every((col) => col !== EMPTY)) {
+                board.splice(y, 1);
+                board.unshift(Array(COLS).fill(EMPTY));
+                score += 100;
+                updateScore();
+            }
         }
     }
 
