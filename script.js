@@ -3,20 +3,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const context = canvas.getContext('2d');
     const scoreDisplay = document.getElementById('score');
     const highScoresList = document.getElementById('highScores');
-    const gameOverMessage = document.getElementById('gameOverMessage');
-    const restartButton = document.getElementById('restartButton');
-
-    const screenWidth = window.innerWidth;
-    const screenHeight = window.innerHeight;
-    const canvasWidth = screenWidth <= 375 ? screenWidth : 375;
-    const canvasHeight = screenHeight <= 667 ? screenHeight : 667;
-
-    canvas.width = canvasWidth;
-    canvas.height = canvasHeight;
+    const blockBreakSound = document.getElementById('blockBreakSound');
+    const winSound = document.getElementById('winSound');
+    const loseSound = document.getElementById('loseSound');
 
     const COLS = 10;
     const ROWS = 20;
-    const BLOCK_SIZE = Math.min(Math.floor(canvasWidth / COLS), Math.floor(canvasHeight / ROWS));
+    const BLOCK_SIZE = 30;
+    const canvasWidth = COLS * BLOCK_SIZE;
+    const canvasHeight = ROWS * BLOCK_SIZE;
+    
+    canvas.width = canvasWidth;
+    canvas.height = canvasHeight;
+
     let score = 0;
     let gameOver = false;
 
@@ -93,20 +92,16 @@ document.addEventListener('DOMContentLoaded', () => {
             updateScore();
             if (score >= 2000) {
                 gameOver = true;
-                // winSound.play();
-                gameOverMessage.textContent = 'Helal Sana Beah!';
-                gameOverMessage.style.display = 'block';
-                restartButton.style.display = 'block';
+                winSound.play();
+                alert('Helal Sana Beah!');
                 saveScore();
                 displayScores();
             } else {
                 piece = randomPiece();
                 if (collide(grid, piece)) {
                     gameOver = true;
-                    // loseSound.play();
-                    gameOverMessage.textContent = 'Başaramadın!';
-                    gameOverMessage.style.display = 'block';
-                    restartButton.style.display = 'block';
+                    loseSound.play();
+                    alert('Başaramadın!');
                     saveScore();
                     displayScores();
                 }
@@ -163,6 +158,9 @@ document.addEventListener('DOMContentLoaded', () => {
             lines++;
             y++;
         }
+        if (lines > 0) {
+            blockBreakSound.play();
+        }
         return lines;
     }
 
@@ -194,46 +192,33 @@ document.addEventListener('DOMContentLoaded', () => {
         highScoresList.innerHTML = scores.map(score => `<li>${score}</li>`).join('');
     }
 
-    function restartGame() {
-        grid = createGrid(ROWS, COLS);
-        score = 0;
-        piece = randomPiece();
-        gameOver = false;
-        gameOverMessage.style.display = 'none';
-        restartButton.style.display = 'none';
-        updateScore();
-    }
-
     function update() {
         if (!gameOver) {
             dropPiece();
             drawGrid();
             drawBlock(piece.x, piece.y, piece.shape, piece.color);
+            setTimeout(update, 500);
         }
-        setTimeout(update, 500); // Oyun döngüsünü devam ettir
     }
 
     document.addEventListener('keydown', (event) => {
-        if (!gameOver) {
-            if (event.key === 'ArrowLeft') {
-                movePiece(-1);
-            } else if (event.key === 'ArrowRight') {
-                movePiece(1);
-            } else if (event.key === 'ArrowDown') {
-                dropPiece();
-            } else if (event.key === 'ArrowUp') {
-                rotatePiece();
-            }
-            drawGrid();
-            drawBlock(piece.x, piece.y, piece.shape, piece.color);
+        if (event.key === 'ArrowLeft') {
+            movePiece(-1);
+        } else if (event.key === 'ArrowRight') {
+            movePiece(1);
+        } else if (event.key === 'ArrowDown') {
+            dropPiece();
+        } else if (event.key === 'ArrowUp') {
+            rotatePiece();
         }
+        drawGrid();
+        drawBlock(piece.x, piece.y, piece.shape, piece.color);
     });
 
     document.getElementById('leftButton').addEventListener('click', () => movePiece(-1));
     document.getElementById('rightButton').addEventListener('click', () => movePiece(1));
     document.getElementById('downButton').addEventListener('click', () => dropPiece());
     document.getElementById('rotateButton').addEventListener('click', () => rotatePiece());
-    restartButton.addEventListener('click', restartGame);
 
     update();
     displayScores();
