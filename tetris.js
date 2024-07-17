@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const COLS = 10;
     const EMPTY = 'white';
     let board = [];
+    let currentShape;
+    let currentShapePosition;
     let score = 0;
     let lastScores = [];
 
@@ -51,26 +53,49 @@ document.addEventListener('DOMContentLoaded', () => {
         return shapes[randomIndex];
     }
 
-    // Start the game
-    function startGame() {
-        init();
-        drawBoard();
-        // Your game logic here
-    }
-
-    // Update score display
-    function updateScore() {
-        scoreDisplay.textContent = score;
-    }
-
-    // Display last 3 scores
-    function displayLastScores() {
-        lastScoresList.innerHTML = '';
-        lastScores.slice(0, 3).forEach((score, index) => {
-            const li = document.createElement('li');
-            li.textContent = score;
-            lastScoresList.appendChild(li);
+    // Place current shape on the board
+    function drawShape() {
+        currentShapePosition.forEach((pos) => {
+            const [x, y] = pos;
+            board[y][x] = currentShape.color;
         });
+    }
+
+    // Clear current shape from the board
+    function clearShape() {
+        currentShapePosition.forEach((pos) => {
+            const [x, y] = pos;
+            board[y][x] = EMPTY;
+        });
+    }
+
+    // Move current shape down
+    function moveDown() {
+        clearShape();
+        currentShapePosition = currentShapePosition.map((pos) => [pos[0], pos[1] + 1]);
+        drawShape();
+    }
+
+    // Check collision
+    function checkCollision() {
+        return currentShapePosition.some((pos) => {
+            const [x, y] = pos;
+            return y >= ROWS || board[y][x] !== EMPTY;
+        });
+    }
+
+    // Rotate current shape
+    function rotateShape() {
+        const rotatedShape = [];
+        currentShape.shape.forEach((row, rowIndex) => {
+            row.forEach((col, colIndex) => {
+                if (!rotatedShape[colIndex]) {
+                    rotatedShape[colIndex] = [];
+                }
+                rotatedShape[colIndex][row.length - 1 - rowIndex] = col;
+            });
+        });
+        currentShape.shape = rotatedShape;
     }
 
     // Game over function
@@ -82,6 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
             alert("Daha çok çabalamalısın!");
         }
         lastScores.unshift(score);
+        lastScores = lastScores.slice(0, 3);
         displayLastScores();
         score = 0;
         updateScore();
@@ -89,11 +115,53 @@ document.addEventListener('DOMContentLoaded', () => {
         drawBoard();
     }
 
+    // Update score display
+    function updateScore() {
+        scoreDisplay.textContent = score;
+    }
+
+    // Display last 3 scores
+    function displayLastScores() {
+        lastScoresList.innerHTML = '';
+        lastScores.forEach((score) => {
+            const li = document.createElement('li');
+            li.textContent = score;
+            lastScoresList.appendChild(li);
+        });
+    }
+
     // Add key events for controls (using arrow emojis)
     document.addEventListener('keydown', (e) => {
-        // Your control logic here
+        if (e.key === 'ArrowLeft') {
+            // Move left
+        } else if (e.key === 'ArrowRight') {
+            // Move right
+        } else if (e.key === 'ArrowDown') {
+            // Move down faster
+        } else if (e.key === 'ArrowUp') {
+            // Rotate
+        }
     });
 
     // Initialize the game
+    function startGame() {
+        init();
+        drawBoard();
+        currentShape = randomShape();
+        currentShapePosition = [[3, 0]]; // Initial position
+        drawShape();
+    }
+
+    // Game loop
+    function gameLoop() {
+        moveDown();
+        if (checkCollision()) {
+            gameOver();
+        } else {
+            setTimeout(gameLoop, 1000); // Drop speed
+        }
+    }
+
     startGame();
+    gameLoop();
 });
