@@ -50,6 +50,7 @@ button:hover {
     position: relative;
     width: 100%;
     max-width: 600px;
+    margin: auto;
 }
 
 #tetris-board {
@@ -61,6 +62,33 @@ button:hover {
     margin-top: 10px;
 }
 
+/* Kontroller */
+#controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+#controls button {
+    background-color: #28a745;
+    margin: 5px;
+    padding: 15px;
+    font-size: 14px;
+    width: 60px;
+    height: 60px;
+}
+
+#controls button:hover {
+    background-color: #218838;
+}
+
+#game-over-message {
+    color: red;
+    font-size: 18px;
+    margin-top: 20px;
+}
+
 /* Skor ekranı */
 #scores-screen ul {
     list-style-type: none;
@@ -69,13 +97,6 @@ button:hover {
 
 #scores-screen li {
     padding: 5px 0;
-}
-
-/* Oyun bitti mesajı */
-#game-over-message {
-    color: red;
-    font-size: 18px;
-    margin-top: 20px;
 }
 
 /* Mobil optimizasyon */
@@ -96,5 +117,12 @@ button:hover {
 
     #game-over-message {
         font-size: 16px;
+    }
+
+    #controls button {
+        font-size: 12px;
+        width: 50px;
+        height: 50px;
+        padding: 10px;
     }
 }
