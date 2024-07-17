@@ -215,8 +215,8 @@ document.addEventListener('DOMContentLoaded', () => {
             dropPiece();
             drawGrid();
             drawBlock(piece.x, piece.y, piece.shape, piece.color);
-            setTimeout(update, 500);
         }
+        setTimeout(update, 500); // Oyun döngüsünü devam ettir
     }
 
     document.addEventListener('keydown', (event) => {
