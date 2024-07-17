@@ -81,6 +81,7 @@ button:hover {
     position: fixed;
     bottom: 20px;
     left: 20px;
+    align-items: center;
 }
 
 #control-buttons {
