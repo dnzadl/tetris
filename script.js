@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (score >= 2000) {
                 gameOver = true;
                 winSound.play();
-                showGameOverMessage('Helal Sana Beah!');
+                showGameOverMessage('Tebrikler Başardın!');
                 saveScore();
                 displayScores();
             } else {
@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (collide(grid, piece)) {
                     gameOver = true;
                     loseSound.play();
-                    showGameOverMessage('Başaramadın!');
+                    showGameOverMessage('Daha çok çabalamalısın!');
                     saveScore();
                     displayScores();
                 }
