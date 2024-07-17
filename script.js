@@ -16,6 +16,19 @@ document.addEventListener('DOMContentLoaded', () => {
     canvas.width = canvasWidth;
     canvas.height = canvasHeight;
 
+    // Yeni alanlar tanımla
+    const controlsContainer = document.getElementById('controls');
+    const buttonWidth = 50;
+    const buttonHeight = 50;
+    const buttonMargin = 10;
+    const controlsWidth = (buttonWidth + buttonMargin) * 4;
+    const controlsHeight = buttonHeight;
+
+    controlsContainer.style.width = `${controlsWidth}px`;
+    controlsContainer.style.position = 'absolute';
+    controlsContainer.style.left = `${(canvasWidth - controlsWidth) / 2}px`;
+    controlsContainer.style.top = `${canvasHeight + 20}px`;
+
     let score = 0;
     let gameOver = false;
 
@@ -215,10 +228,34 @@ document.addEventListener('DOMContentLoaded', () => {
         drawBlock(piece.x, piece.y, piece.shape, piece.color);
     });
 
-    document.getElementById('leftButton').addEventListener('click', () => movePiece(-1));
-    document.getElementById('rightButton').addEventListener('click', () => movePiece(1));
-    document.getElementById('downButton').addEventListener('click', () => dropPiece());
-    document.getElementById('rotateButton').addEventListener('click', () => rotatePiece());
+    // Tuş kontrollerini yerleştir
+    const leftButton = document.createElement('button');
+    leftButton.textContent = '←';
+    leftButton.style.width = `${buttonWidth}px`;
+    leftButton.style.height = `${buttonHeight}px`;
+    leftButton.addEventListener('click', () => movePiece(-1));
+    controlsContainer.appendChild(leftButton);
+
+    const rightButton = document.createElement('button');
+    rightButton.textContent = '→';
+    rightButton.style.width = `${buttonWidth}px`;
+    rightButton.style.height = `${buttonHeight}px`;
+    rightButton.addEventListener('click', () => movePiece(1));
+    controlsContainer.appendChild(rightButton);
+
+    const downButton = document.createElement('button');
+    downButton.textContent = '↓';
+    downButton.style.width = `${buttonWidth}px`;
+    downButton.style.height = `${buttonHeight}px`;
+    downButton.addEventListener('click', () => dropPiece());
+    controlsContainer.appendChild(downButton);
+
+    const rotateButton = document.createElement('button');
+    rotateButton.textContent = '↻';
+    rotateButton.style.width = `${buttonWidth}px`;
+    rotateButton.style.height = `${buttonHeight}px`;
+    rotateButton.addEventListener('click', () => rotatePiece());
+    controlsContainer.appendChild(rotateButton);
 
     update();
     displayScores();
