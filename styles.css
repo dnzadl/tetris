@@ -1,44 +1,38 @@
-/* styles.css */
+/* style.css */
+
+/* Genel stili tanımlar */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f0f0f0;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    overflow: hidden;
+    background-color: #f4f4f4;
 }
 
-#game-container {
+h1, h2 {
+    color: #333;
+}
+
+/* Başlangıç ekranı */
+#start-screen, #scores-screen, #player-name-section, #game-container {
     display: none;
     text-align: center;
 }
 
-#tetris-board {
-    border: 2px solid #000;
-    background-color: #eee;
+#start-screen {
     display: block;
-    width: 100%;
-    max-width: 360px; /* Mobil uyumluluk için genişliği ayarlayın */
-    height: auto;
-    aspect-ratio: 1; /* Oyun tahtasının kare şeklinde kalmasını sağlar */
-}
-
-#start-screen, #scores-screen, #player-name-section {
-    display: none;
-    text-align: center;
 }
 
 button {
-    margin: 5px;
-    padding: 10px 20px;
-    font-size: 16px;
     background-color: #007bff;
-    color: #fff;
+    color: white;
     border: none;
-    border-radius: 5px;
+    padding: 10px 20px;
+    margin: 10px;
+    font-size: 16px;
     cursor: pointer;
 }
 
@@ -46,19 +40,61 @@ button:hover {
     background-color: #0056b3;
 }
 
-#player-name-section {
-    display: block;
+#player-name-section input {
+    padding: 10px;
+    font-size: 16px;
 }
 
+/* Oyun alanı */
+#game-container {
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+}
+
+#tetris-board {
+    border: 1px solid #000;
+    background-color: #fff;
+}
+
+#game-info {
+    margin-top: 10px;
+}
+
+/* Skor ekranı */
+#scores-screen ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+#scores-screen li {
+    padding: 5px 0;
+}
+
+/* Oyun bitti mesajı */
 #game-over-message {
-    display: none;
-    font-size: 24px;
-    font-weight: bold;
     color: red;
+    font-size: 18px;
+    margin-top: 20px;
 }
 
-#score {
-    font-size: 18px;
-    font-weight: bold;
-    margin: 10px 0;
+/* Mobil optimizasyon */
+@media (max-width: 600px) {
+    button {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+
+    #player-name-section input {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    #game-info {
+        font-size: 14px;
+    }
+
+    #game-over-message {
+        font-size: 16px;
+    }
 }
