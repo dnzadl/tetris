@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tetris Game</title>
+    <link rel="stylesheet" href="styles.css">
     <style>
         body {
             background-color: #1E1E1E;
@@ -35,8 +36,8 @@
             align-items: center;
         }
         button {
-            font-size: 20px;
-            margin: 0 10px;
+            font-size: 24px;
+            margin: 5px;
             background-color: #175DA9;
             color: white;
             border: none;
@@ -44,6 +45,7 @@
             width: 50px;
             height: 50px;
             cursor: pointer;
+            outline: none;
         }
         #score {
             font-size: 24px;
@@ -68,6 +70,7 @@
             border-radius: 5px;
             cursor: pointer;
             display: none;
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -75,10 +78,10 @@
     <div id="gameContainer">
         <canvas id="gameCanvas"></canvas>
         <div id="controls">
-            <button id="leftButton">←</button>
-            <button id="rotateButton">↻</button>
-            <button id="rightButton">→</button>
-            <button id="downButton">↓</button>
+            <button id="leftButton">⬅️</button>
+            <button id="rotateButton">🔄</button>
+            <button id="rightButton">➡️</button>
+            <button id="downButton">⬇️</button>
         </div>
         <div id="score">Score: 0</div>
         <div id="highScores"></div>
