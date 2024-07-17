@@ -34,3 +34,8 @@ input {
     margin: 10px;
     padding: 10px;
 }
+
+#game-over-message {
+    font-size: 24px;
+    margin-top: 20px;
+}
