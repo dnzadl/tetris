@@ -165,7 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentShape = randomShape();
         currentShapePosition = [[3, 0]]; // Initial position
         drawShape();
-        setTimeout(gameLoop, 1000); // Start game loop
+        gameLoop();
     }
 
     // Game loop
