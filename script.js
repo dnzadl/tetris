@@ -24,7 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let intervalId;
     let touchStartX, touchStartY;
     let playerName = localStorage.getItem('playerName') || '';
-    const savedScores = JSON.parse(localStorage.getItem('tetrisScores')) || [];
     let gameStarted = false;
 
     canvas.width = COLS * BLOCK_SIZE;
@@ -136,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 score += 100;
                 if (intervalId) {
                     clearInterval(intervalId);
-                    intervalId = setInterval(updateGame, 1000 / 6); // %20 yavaşlatıldı
+                    intervalId = setInterval(updateGame, 1000 / 4); // %20 yavaşlatıldı
                 }
             }
         }
@@ -204,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
         board = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
         drawBoard();
         newPiece();
-        intervalId = setInterval(updateGame, 1000 / 6); // %20 yavaşlatıldı
+        intervalId = setInterval(updateGame, 1000 / 4); // %20 yavaşlatıldı
         gameStarted = true;
         gameContainer.style.display = 'block';
         startScreen.style.display = 'none';
