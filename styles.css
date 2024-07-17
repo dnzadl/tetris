@@ -1,6 +1,6 @@
 /* style.css */
 
-/* Genel stili tanımlar */
+/* Genel stil tanımlamaları */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -48,8 +48,8 @@ button:hover {
 /* Oyun alanı */
 #game-container {
     position: relative;
-    width: 360px; /* Instagram gönderi boyutunda */
-    height: 360px; /* Instagram gönderi boyutunda */
+    width: 288px; /* Oyun alanını %20 küçültülmüş boyutta */
+    height: 288px; /* Oyun alanını %20 küçültülmüş boyutta */
     border: 2px solid #333; /* Oyun alanına çerçeve ekleme */
     box-sizing: border-box;
     margin-top: 20px;
@@ -81,7 +81,17 @@ button:hover {
     position: fixed;
     bottom: 20px;
     left: 20px;
-    width: auto;
+    align-items: center;
+}
+
+#control-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.control-row {
+    display: flex;
 }
 
 .control-button {
@@ -93,6 +103,7 @@ button:hover {
     height: 60px;
     border-radius: 50%; /* Yuvarlak buton */
     border: none;
+    text-align: center;
 }
 
 .control-button:hover {
@@ -100,20 +111,25 @@ button:hover {
 }
 
 /* Yön tuşları */
-#left-button {
-    margin-bottom: 10px;
+#left-button, #right-button, #down-button, #rotate-button {
+    font-size: 24px;
 }
 
+/* Yön tuşlarının düzeni */
 #rotate-button {
     margin-bottom: 10px;
 }
 
-#right-button {
-    margin-bottom: 10px;
+.control-row {
+    margin-bottom: 5px;
+}
+
+#left-button {
+    margin-right: 10px;
 }
 
 #down-button {
-    margin-bottom: 10px;
+    margin-top: 10px;
 }
 
 #game-over-message {
