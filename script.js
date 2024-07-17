@@ -212,7 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('leftButton').addEventListener('click', () => movePiece(-1));
     document.getElementById('rightButton').addEventListener('click', () => movePiece(1));
     document.getElementById('downButton').addEventListener('click', () => dropPiece());
-    document.getElementById('upButton').addEventListener('click', () => rotatePiece());
+    document.getElementById('rotateButton').addEventListener('click', () => rotatePiece());
 
     update();
     displayScores();
