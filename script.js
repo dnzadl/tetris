@@ -158,56 +158,61 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function gameOver() {
         clearInterval(intervalId);
-        gameOverMessage.textContent = score >= 2000 ? 'Tebrikler Başardınız!' : 'Üzgünüm Yeterli Değilsin';
+        gameOverMessage.textContent = score >= 2000 ? 'Tebrikler Başardınız!' : 'Üzgünüm Yeterli Değilsiniz';
+        gameOverMessage.style.display = 'block';
         saveScore();
-        showStartScreen();
+        setTimeout(showStartScreen, 3000);
     }
 
     function saveScore() {
-        savedScores.push(score);
-        savedScores.sort((a, b) => b - a);
-        savedScores.splice(5); // Keep top 5 scores
+        savedScores.push({ name: playerName, score });
+        savedScores.sort((a, b) => b.score - a.score);
+        if (savedScores.length > 5) {
+            savedScores.pop();
+        }
         localStorage.setItem('tetrisScores', JSON.stringify(savedScores));
-        showScoresScreen();
     }
 
-    function showScoresScreen() {
-        scoresList.innerHTML = savedScores.map(score => `<li>${score}</li>`).join('');
-        scoresScreen.style.display = 'block';
-        gameContainer.style.display = 'none';
+    function startGame() {
+        score = 0;
+        updateScore();
+        board = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
+        newPiece();
+        gameOverMessage.style.display = 'none';
+        gameContainer.style.display = 'block';
+        intervalId = setInterval(() => movePiece(0, 1), 200); // Speed: Adjust this for game speed
     }
 
     function showStartScreen() {
         startScreen.style.display = 'block';
-        gameContainer.style.display = 'none';
         scoresScreen.style.display = 'none';
-        playerNameSection.style.display = 'none';
+        gameContainer.style.display = 'none';
     }
 
-    function startGame() {
-        board = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
-        score = 0;
-        updateScore();
-        newPiece();
-        intervalId = setInterval(() => movePiece(0, 1), 33); // 3 kat hızlandırılmış hız, 33 ms olarak ayarlandı
-        gameContainer.style.display = 'block';
+    function showScoresScreen() {
         startScreen.style.display = 'none';
-        scoresScreen.style.display = 'none';
+        scoresScreen.style.display = 'block';
+        scoresList.innerHTML = '';
+        savedScores.forEach(score => {
+            const li = document.createElement('li');
+            li.textContent = `${score.name}: ${score.score}`;
+            scoresList.appendChild(li);
+        });
     }
 
     function handleKeyDown(event) {
         switch (event.key) {
             case 'ArrowLeft':
-                movePiece(-1, 0); // Sol
+                movePiece(-1, 0);
                 break;
             case 'ArrowRight':
-                movePiece(1, 0); // Sağ
+                movePiece(1, 0);
                 break;
             case 'ArrowDown':
-                movePiece(0, 1); // Aşağı
+                movePiece(0, 1);
                 break;
             case 'ArrowUp':
-                rotatePiece(); // Dönme
+                rotatePiece();
                 break;
         }
     }
@@ -236,6 +241,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 rotatePiece(); // Döndürme
             }
         }
+        startX = touch.clientX;
+        startY = touch.clientY;
     }
 
     startButton.addEventListener('click', () => {
