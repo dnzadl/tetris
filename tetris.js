@@ -127,6 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateScore();
         init();
         drawBoard();
+        startGame();
     }
 
     // Update score display
@@ -164,6 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentShape = randomShape();
         currentShapePosition = [[3, 0]]; // Initial position
         drawShape();
+        setTimeout(gameLoop, 1000); // Start game loop
     }
 
     // Game loop
@@ -177,5 +179,4 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     startGame();
-    gameLoop();
 });
