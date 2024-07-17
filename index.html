@@ -20,7 +20,9 @@
     </div>
 
     <div id="game-container">
-        <canvas id="tetris-board"></canvas>
+        <div id="game-area">
+            <canvas id="tetris-board"></canvas>
+        </div>
         <div id="game-info">
             <p id="score">Score: 0</p>
             <button id="restart-button">Restart Game</button>
@@ -30,10 +32,10 @@
     </div>
 
     <div id="controls">
-        <button id="left-button">Left</button>
-        <button id="rotate-button">Rotate</button>
-        <button id="right-button">Right</button>
-        <button id="down-button">Down</button>
+        <button id="left-button" class="control-button">←</button>
+        <button id="rotate-button" class="control-button">↻</button>
+        <button id="right-button" class="control-button">→</button>
+        <button id="down-button" class="control-button">↓</button>
     </div>
 
     <div id="scores-screen">
