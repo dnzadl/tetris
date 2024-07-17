@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ];
         const shape = shapes[Math.floor(Math.random() * shapes.length)];
         const color = Math.floor(Math.random() * COLORS.length) + 1;
-        return { shape, color };
+        return { shape, color, x: Math.floor(COLS / 2) - 1, y: 0 };
     }
 
     function movePiece(dx, dy) {
@@ -126,8 +126,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         clearLines();
         currentPiece = generatePiece();
-        currentPiece.x = Math.floor(COLS / 2) - 1;
-        currentPiece.y = 0;
         if (!isValidPosition(currentPiece)) {
             endGame();
         }
@@ -155,16 +153,15 @@ document.addEventListener('DOMContentLoaded', () => {
         score = 0;
         board = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
         currentPiece = generatePiece();
-        currentPiece.x = Math.floor(COLS / 2) - 1;
-        currentPiece.y = 0;
         scoreElement.textContent = `Score: ${score}`;
         gameOverMessage.textContent = '';
         startScreen.style.display = 'none';
         scoresScreen.style.display = 'none';
         gameContainer.style.display = 'block';
+        playerNameSection.style.display = 'none';
 
         clearInterval(intervalId);
-        intervalId = setInterval(() => movePiece(0, 1), 720); // Speed: 720ms (yaklaşık %20 yavaşlatılmış)
+        intervalId = setInterval(() => movePiece(0, 1), 900); // %20 yavaşlatılmış
     }
 
     function endGame() {
@@ -243,40 +240,18 @@ document.addEventListener('DOMContentLoaded', () => {
         touchStartY = touch.clientY;
     }
 
-    function handleTouchEnd() {
-        if (gameStarted) {
-            movePiece(0, 1); // Move piece down
-        }
-    }
-
-    startButton.addEventListener('click', () => {
-        if (!gameStarted && playerName) {
-            startGame();
-        } else if (!playerName) {
-            playerNameSection.style.display = 'block';
-        }
-    });
-
-    saveNameButton.addEventListener('click', () => {
-        if (playerNameInput.value) {
-            playerName = playerNameInput.value;
-            localStorage.setItem('playerName', playerName);
-            playerNameSection.style.display = 'none';
-            showStartScreen();
-        }
-    });
-
+    startButton.addEventListener('click', startGame);
     restartButton.addEventListener('click', startGame);
     scoresButton.addEventListener('click', showScoresScreen);
     backButton.addEventListener('click', showStartScreen);
+    saveNameButton.addEventListener('click', () => {
+        playerName = playerNameInput.value.trim();
+        localStorage.setItem('playerName', playerName);
+        playerNameSection.style.display = 'none';
+        startScreen.style.display = 'block';
+    });
 
-    leftButton.addEventListener('click', () => movePiece(-1, 0));
-    rightButton.addEventListener('click', () => movePiece(1, 0));
-    downButton.addEventListener('click', () => movePiece(0, 1));
-    rotateButton.addEventListener('click', rotatePiece);
-
-    document.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keydown', handleKeyDown);
     canvas.addEventListener('touchstart', handleTouchStart);
     canvas.addEventListener('touchmove', handleTouchMove);
-    canvas.addEventListener('touchend', handleTouchEnd);
 });
