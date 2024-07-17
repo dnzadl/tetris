@@ -132,12 +132,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 board.splice(y, 1);
                 board.unshift(Array(COLS).fill(0));
                 score += 100;
-                if (score % 300 === 0) {
-                    score += 300; // Bonus for multiple line clears
-                }
                 updateScore();
-                drawBoard();
-                y++; // Check this row again
+                y++;
             }
         }
     }
@@ -192,7 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
         score = 0;
         updateScore();
         newPiece();
-        intervalId = setInterval(() => movePiece(0, 1), 100); // 3 kat hızlandırılmış hız, 100 ms olarak ayarlandı
+        intervalId = setInterval(() => movePiece(0, 1), 33); // 3 kat hızlandırılmış hız, 33 ms olarak ayarlandı
         gameContainer.style.display = 'block';
         startScreen.style.display = 'none';
         scoresScreen.style.display = 'none';
