@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let board = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
     let currentPiece, score = 0;
     let intervalId;
+    let startX, startY;
     let playerName = localStorage.getItem('playerName') || '';
     const savedScores = JSON.parse(localStorage.getItem('tetrisScores')) || [];
 
