@@ -1,128 +1,55 @@
-/* Genel stil tanımlamaları */
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f4f4f4;
+    background-color: #333;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    color: #fff;
 }
 
-h1 {
-    color: #333;
+.game-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-/* Başlangıç ekranı */
-#start-screen {
+.game-frame {
+    background-color: #333;
+    border: 5px solid #175DA9;
+    width: 320px;
+    height: 640px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+canvas {
+    background-color: #000;
+}
+
+.score-board {
+    margin-top: 20px;
     text-align: center;
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
 }
 
 button {
-    background-color: #007bff;
+    background-color: #175DA9;
     color: white;
     border: none;
-    padding: 10px 20px;
-    margin: 10px;
-    font-size: 16px;
+    padding: 10px;
+    margin: 5px;
+    font-size: 20px;
     cursor: pointer;
 }
 
-button:hover {
-    background-color: #0056b3;
-}
-
-/* Oyun alanı */
-#game-container {
-    position: relative;
-    width: 560px; /* %30 küçültülmüş boyut (800px - 30%) */
-    height: 960px; /* %30 küçültülmüş boyut (1370px - 30%) */
-    border: 2px solid #333; /* Oyun alanına çerçeve ekleme */
-    box-sizing: border-box;
-    background: white;
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-
-#game-area {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-}
-
-#tetris-board {
-    width: 100%;
-    height: 100%;
-}
-
-/* Bilgi kısmı */
-#game-info {
-    margin-top: 10px;
-}
-
-/* Kontroller */
-#controls {
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    bottom: 20px;
-    left: 20px;
-    align-items: center;
-}
-
-#control-buttons {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.control-row {
-    display: flex;
-}
-
-.control-button {
-    background-color: #28a745;
-    margin: 5px;
-    padding: 10px; /* %200 büyütülmüş buton */
-    font-size: 24px; /* %200 büyütülmüş font boyutu */
-    width: 60px; /* %200 büyütülmüş boyut */
-    height: 60px; /* %200 büyütülmüş boyut */
-    border-radius: 50%; /* Yuvarlak buton */
-    border: none;
-    text-align: center;
-}
-
-.control-button:hover {
-    background-color: #218838;
-}
-
-/* Mobil optimizasyon */
-@media (max-width: 600px) {
-    button {
-        font-size: 14px;
-        padding: 8px 16px;
-    }
-
-    #game-info {
-        font-size: 14px;
-    }
-
-    #game-over-message {
-        font-size: 16px;
-    }
-
-    .control-button {
-        font-size: 24px; /* %200 büyütülmüş font boyutu */
-        width: 60px; /* %200 büyütülmüş boyut */
-        height: 60px; /* %200 büyütülmüş boyut */
-        padding: 10px;
-    }
-}
-
-/* Gizli sınıf */
-.hidden {
-    display: none;
+button:active {
+    background-color: #0e3d73;
 }
