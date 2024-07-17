@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let board = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
     let currentPiece, score = 0;
     let intervalId;
-    let startX, startY, touchStartX, touchStartY;
+    let touchStartX, touchStartY;
     let playerName = localStorage.getItem('playerName') || '';
     const savedScores = JSON.parse(localStorage.getItem('tetrisScores')) || [];
     let gameStarted = false;
@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 score += 100;
                 if (intervalId) {
                     clearInterval(intervalId);
-                    intervalId = setInterval(updateGame, 1000 / 3); // 3 kat daha hızlı
+                    intervalId = setInterval(updateGame, 1000 / 6); // %20 yavaşlatıldı
                 }
             }
         }
@@ -149,6 +149,13 @@ document.addEventListener('DOMContentLoaded', () => {
             endGame();
         }
         drawGame();
+    }
+
+    function drawGame() {
+        drawBoard();
+        if (currentPiece) {
+            drawPiece(currentPiece, currentPiece.x, currentPiece.y, COLORS[currentPiece.color - 1]);
+        }
     }
 
     function endGame() {
@@ -197,7 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
         board = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
         drawBoard();
         newPiece();
-        intervalId = setInterval(updateGame, 1000 / 5); // Yavaşlatıldı
+        intervalId = setInterval(updateGame, 1000 / 6); // %20 yavaşlatıldı
         gameStarted = true;
         gameContainer.style.display = 'block';
         startScreen.style.display = 'none';
