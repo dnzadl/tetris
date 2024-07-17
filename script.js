@@ -3,6 +3,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const context = canvas.getContext('2d');
     const scoreDisplay = document.getElementById('score');
     const highScoresList = document.getElementById('highScores');
+    const gameOverMessage = document.getElementById('gameOverMessage');
+    const restartButton = document.getElementById('restartButton');
     const blockBreakSound = document.getElementById('blockBreakSound');
     const winSound = document.getElementById('winSound');
     const loseSound = document.getElementById('loseSound');
@@ -12,11 +14,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const BLOCK_SIZE = 30;
     const canvasWidth = COLS * BLOCK_SIZE;
     const canvasHeight = ROWS * BLOCK_SIZE;
-    
+
     canvas.width = canvasWidth;
     canvas.height = canvasHeight;
 
-    // Yeni alanlar tanımla
     const controlsContainer = document.getElementById('controls');
     const buttonWidth = 50;
     const buttonHeight = 50;
@@ -106,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (score >= 2000) {
                 gameOver = true;
                 winSound.play();
-                alert('Helal Sana Beah!');
+                showGameOverMessage('Helal Sana Beah!');
                 saveScore();
                 displayScores();
             } else {
@@ -114,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (collide(grid, piece)) {
                     gameOver = true;
                     loseSound.play();
-                    alert('Başaramadın!');
+                    showGameOverMessage('Başaramadın!');
                     saveScore();
                     displayScores();
                 }
@@ -165,7 +166,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     continue outer;
                 }
             }
-
             const row = grid.splice(y, 1)[0].fill(0);
             grid.unshift(row);
             lines++;
@@ -187,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateScore() {
-        scoreDisplay.textContent = score;
+        scoreDisplay.textContent = `Score: ${score}`;
     }
 
     function saveScore() {
@@ -203,6 +203,23 @@ document.addEventListener('DOMContentLoaded', () => {
     function displayScores() {
         const scores = JSON.parse(localStorage.getItem('scores')) || [];
         highScoresList.innerHTML = scores.map(score => `<li>${score}</li>`).join('');
+    }
+
+    function showGameOverMessage(message) {
+        gameOverMessage.textContent = message;
+        gameOverMessage.style.display = 'block';
+        restartButton.style.display = 'block';
+    }
+
+    function restartGame() {
+        grid = createGrid(ROWS, COLS);
+        score = 0;
+        gameOver = false;
+        piece = randomPiece();
+        gameOverMessage.style.display = 'none';
+        restartButton.style.display = 'none';
+        updateScore();
+        displayScores();
     }
 
     function update() {
@@ -228,34 +245,10 @@ document.addEventListener('DOMContentLoaded', () => {
         drawBlock(piece.x, piece.y, piece.shape, piece.color);
     });
 
-    // Tuş kontrollerini yerleştir
-    const leftButton = document.createElement('button');
-    leftButton.textContent = '←';
-    leftButton.style.width = `${buttonWidth}px`;
-    leftButton.style.height = `${buttonHeight}px`;
-    leftButton.addEventListener('click', () => movePiece(-1));
-    controlsContainer.appendChild(leftButton);
-
-    const rightButton = document.createElement('button');
-    rightButton.textContent = '→';
-    rightButton.style.width = `${buttonWidth}px`;
-    rightButton.style.height = `${buttonHeight}px`;
-    rightButton.addEventListener('click', () => movePiece(1));
-    controlsContainer.appendChild(rightButton);
-
-    const downButton = document.createElement('button');
-    downButton.textContent = '↓';
-    downButton.style.width = `${buttonWidth}px`;
-    downButton.style.height = `${buttonHeight}px`;
-    downButton.addEventListener('click', () => dropPiece());
-    controlsContainer.appendChild(downButton);
-
-    const rotateButton = document.createElement('button');
-    rotateButton.textContent = '↻';
-    rotateButton.style.width = `${buttonWidth}px`;
-    rotateButton.style.height = `${buttonHeight}px`;
-    rotateButton.addEventListener('click', () => rotatePiece());
-    controlsContainer.appendChild(rotateButton);
+    document.getElementById('leftButton').addEventListener('click', () => movePiece(-1));
+    document.getElementById('rightButton').addEventListener('click', () => movePiece(1));
+    document.getElementById('downButton').addEventListener('click', () => dropPiece());
+    document.getElementById('rotateButton').addEventListener('click', () => rotatePiece());
 
     update();
     displayScores();
