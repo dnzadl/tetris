@@ -171,6 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function gameLoop() {
         moveDown();
         if (checkCollision()) {
+            // If collision happens, place shape on board and check lines
             currentShapePosition.forEach((pos) => {
                 const [x, y] = pos;
                 if (y >= 0) {
@@ -178,10 +179,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
             checkLines();
+            // Generate new shape
             currentShape = randomShape();
             currentShapePosition = [[3, 0]]; // Initial position
+            // Check if new shape causes immediate collision (game over)
             if (checkCollision()) {
                 gameOver();
+                return; // Exit function to prevent further looping
             }
         }
         drawShape();
