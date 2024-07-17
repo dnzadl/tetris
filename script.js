@@ -2,13 +2,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('tetris-board');
     const ctx = canvas.getContext('2d');
     const scoreElement = document.getElementById('score');
+    const scoresList = document.getElementById('scores-list');
     const startButton = document.getElementById('start-button');
     const restartButton = document.getElementById('restart-button');
     const scoresButton = document.getElementById('scores-button');
     const backButton = document.getElementById('back-button');
+    const saveNameButton = document.getElementById('save-name');
+    const playerNameInput = document.getElementById('player-name');
     const startScreen = document.getElementById('start-screen');
     const scoresScreen = document.getElementById('scores-screen');
     const gameContainer = document.getElementById('game-container');
+    const playerNameSection = document.getElementById('player-name-section');
+    const gameOverMessage = document.getElementById('game-over-message');
 
     const ROWS = 20;
     const COLS = 10;
@@ -17,10 +22,18 @@ document.addEventListener('DOMContentLoaded', () => {
     let board = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
     let currentPiece, score = 0;
     let intervalId;
+    let playerName = localStorage.getItem('playerName') || '';
     const savedScores = JSON.parse(localStorage.getItem('tetrisScores')) || [];
 
     canvas.width = COLS * BLOCK_SIZE;
     canvas.height = ROWS * BLOCK_SIZE;
+
+    if (playerName) {
+        showStartScreen();
+    } else {
+        playerNameSection.style.display = 'block';
+        startScreen.style.display = 'none';
+    }
 
     function drawBlock(x, y, color) {
         ctx.fillStyle = color;
@@ -148,7 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function gameOver() {
         clearInterval(intervalId);
-        alert(score >= 2000 ? 'Tebrikler Başardınız!' : 'Üzgünüm Yeterli Değilsin');
+        gameOverMessage.textContent = score >= 2000 ? 'Tebrikler Başardınız!' : 'Üzgünüm Yeterli Değilsin';
         saveScore();
         showStartScreen();
     }
@@ -171,6 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
         startScreen.style.display = 'block';
         gameContainer.style.display = 'none';
         scoresScreen.style.display = 'none';
+        playerNameSection.style.display = 'none';
     }
 
     function startGame() {
@@ -238,6 +252,15 @@ document.addEventListener('DOMContentLoaded', () => {
     restartButton.addEventListener('click', startGame);
     scoresButton.addEventListener('click', showScoresScreen);
     backButton.addEventListener('click', showStartScreen);
+    saveNameButton.addEventListener('click', () => {
+        const name = playerNameInput.value.trim();
+        if (name) {
+            localStorage.setItem('playerName', name);
+            playerName = name;
+            playerNameSection.style.display = 'none';
+            showStartScreen();
+        }
+    });
 
     canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
     canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
