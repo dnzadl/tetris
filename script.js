@@ -130,95 +130,99 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function clearLines() {
         for (let y = ROWS - 1; y >= 0; y--) {
-            if (board[y].every(value => value)) {
+            if (board[y].every(cell => cell)) {
                 board.splice(y, 1);
                 board.unshift(Array(COLS).fill(0));
                 score += 100;
-                updateScore();
+                if (intervalId) {
+                    clearInterval(intervalId);
+                    intervalId = setInterval(updateGame, 1000 / 3); // 3 kat daha hızlı
+                }
             }
         }
-    }
-
-    function updateScore() {
         scoreElement.textContent = `Score: ${score}`;
     }
 
     function newPiece() {
         currentPiece = { ...generatePiece(), x: Math.floor(COLS / 2) - 1, y: 0 };
         if (!isValidPosition(currentPiece)) {
-            gameOver();
+            endGame();
         }
+        drawGame();
     }
 
-    function drawGame() {
-        drawBoard();
-        drawPiece(currentPiece, currentPiece.x, currentPiece.y, COLORS[currentPiece.color - 1]);
-    }
-
-    function gameOver() {
+    function endGame() {
         clearInterval(intervalId);
-        gameOverMessage.textContent = score >= 2000 ? 'Congratulations! You won!' : 'Game Over. Better luck next time!';
+        gameStarted = false;
+        gameOverMessage.textContent = `Game Over! Your Score: ${score}`;
         gameOverMessage.style.display = 'block';
         saveScore();
-        gameStarted = false;
-        setTimeout(showStartScreen, 3000);
     }
 
     function saveScore() {
-        if (playerName) {
-            savedScores.push({ name: playerName, score });
-            savedScores.sort((a, b) => b.score - a.score);
-            if (savedScores.length > 5) {
-                savedScores.pop();
-            }
-            localStorage.setItem('tetrisScores', JSON.stringify(savedScores));
+        const scores = JSON.parse(localStorage.getItem('tetrisScores')) || [];
+        scores.push({ name: playerName, score });
+        scores.sort((a, b) => b.score - a.score);
+        if (scores.length > 5) {
+            scores.pop();
         }
+        localStorage.setItem('tetrisScores', JSON.stringify(scores));
+        showScoresScreen();
+    }
+
+    function showScoresScreen() {
+        startScreen.style.display = 'none';
+        gameContainer.style.display = 'none';
+        playerNameSection.style.display = 'none';
+        scoresScreen.style.display = 'block';
+        scoresList.innerHTML = '';
+        JSON.parse(localStorage.getItem('tetrisScores') || '[]').forEach(scoreEntry => {
+            const li = document.createElement('li');
+            li.textContent = `${scoreEntry.name}: ${scoreEntry.score}`;
+            scoresList.appendChild(li);
+        });
+    }
+
+    function showStartScreen() {
+        startScreen.style.display = 'block';
+        gameContainer.style.display = 'none';
+        playerNameSection.style.display = 'none';
+        scoresScreen.style.display = 'none';
+        gameOverMessage.style.display = 'none';
     }
 
     function startGame() {
         if (gameStarted) return;
         score = 0;
-        updateScore();
         board = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
+        drawBoard();
         newPiece();
-        gameOverMessage.style.display = 'none';
-        gameContainer.style.display = 'block';
-        intervalId = setInterval(() => movePiece(0, 1), 300); // Speed: Adjust this for game speed (20% slower)
+        intervalId = setInterval(updateGame, 1000 / 5); // Yavaşlatıldı
         gameStarted = true;
-    }
-
-    function showStartScreen() {
-        startScreen.style.display = 'block';
-        scoresScreen.style.display = 'none';
-        gameContainer.style.display = 'none';
-        gameStarted = false; // Ensure game is not running
-    }
-
-    function showScoresScreen() {
+        gameContainer.style.display = 'block';
         startScreen.style.display = 'none';
-        scoresScreen.style.display = 'block';
-        scoresList.innerHTML = '';
-        savedScores.forEach(score => {
-            const li = document.createElement('li');
-            li.textContent = `${score.name}: ${score.score}`;
-            scoresList.appendChild(li);
-        });
+    }
+
+    function updateGame() {
+        movePiece(0, 1);
     }
 
     function handleKeyDown(event) {
-        switch (event.key) {
-            case 'ArrowLeft':
-                movePiece(-1, 0);
-                break;
-            case 'ArrowRight':
-                movePiece(1, 0);
-                break;
-            case 'ArrowDown':
-                movePiece(0, 1);
-                break;
-            case 'ArrowUp':
-                rotatePiece();
-                break;
+        if (gameStarted) {
+            switch (event.key) {
+                case 'ArrowLeft':
+                    movePiece(-1, 0);
+                    break;
+                case 'ArrowRight':
+                    movePiece(1, 0);
+                    break;
+                case 'ArrowDown':
+                    movePiece(0, 1);
+                    break;
+                case 'ArrowUp':
+                    rotatePiece();
+                    break;
+            }
         }
     }
 
@@ -246,16 +250,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 rotatePiece(); // Rotate
             }
         }
+
         touchStartX = touch.clientX;
         touchStartY = touch.clientY;
     }
 
     function handleTouchEnd(event) {
-        const touch = event.changedTouches[0];
-        const x = Math.floor(touch.clientX / BLOCK_SIZE);
-        const y = Math.floor(touch.clientY / BLOCK_SIZE);
-        if (isValidPosition({...currentPiece, x, y})) {
-            movePiece(0, 1);
+        if (gameStarted) {
+            movePiece(0, 1); // Move piece down
         }
     }
 
@@ -277,13 +279,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     restartButton.addEventListener('click', startGame);
-
     scoresButton.addEventListener('click', showScoresScreen);
-
     backButton.addEventListener('click', showStartScreen);
-
     document.addEventListener('keydown', handleKeyDown);
-
     canvas.addEventListener('touchstart', handleTouchStart);
     canvas.addEventListener('touchmove', handleTouchMove);
     canvas.addEventListener('touchend', handleTouchEnd);
