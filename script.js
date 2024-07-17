@@ -3,8 +3,8 @@
 document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('tetris-board');
     const ctx = canvas.getContext('2d');
-    const width = 120; // %30 küçültülmüş boyut
-    const height = 210; // %30 küçültülmüş boyut
+    const width = 70; // %30 küçültülmüş boyut
+    const height = 120; // %30 küçültülmüş boyut
     canvas.width = width;
     canvas.height = height;
 
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('level').innerText = 'Level: 1';
         document.getElementById('lines').innerText = 'Lines: 0';
         drawBoard();
-        gameInterval = setInterval(gameLoop, 1000 / level);
+        gameInterval = setInterval(gameLoop, 1000 / (level * 1.2)); // %20 yavaşlatılmış hız
     }
 
     // Oyun döngüsü
