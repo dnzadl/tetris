@@ -17,13 +17,8 @@ h1, h2 {
 }
 
 /* Başlangıç ekranı */
-#start-screen, #scores-screen, #player-name-section, #game-container {
-    display: none;
-    text-align: center;
-}
-
 #start-screen {
-    display: block;
+    text-align: center;
 }
 
 button {
@@ -40,21 +35,16 @@ button:hover {
     background-color: #0056b3;
 }
 
-#player-name-section input {
-    padding: 10px;
-    font-size: 16px;
-}
-
 /* Oyun alanı */
 #game-container {
     position: relative;
-    width: 120px; /* %30 daha küçültülmüş boyut */
-    height: 210px; /* %30 daha küçültülmüş boyut */
+    width: 84px; /* %30 küçültülmüş boyut */
+    height: 147px; /* %30 küçültülmüş boyut */
     border: 2px solid #333; /* Oyun alanına çerçeve ekleme */
     box-sizing: border-box;
+    background: white;
     margin-top: 20px;
     margin-bottom: 20px;
-    background: white;
 }
 
 #game-area {
@@ -97,7 +87,7 @@ button:hover {
 .control-button {
     background-color: #28a745;
     margin: 5px;
-    padding: 15px;
+    padding: 20px; /* %200 büyütülmüş buton */
     font-size: 24px; /* %200 büyütülmüş font boyutu */
     width: 100px; /* %200 büyütülmüş boyut */
     height: 100px; /* %200 büyütülmüş boyut */
@@ -115,32 +105,10 @@ button:hover {
     margin-bottom: 10px;
 }
 
-.control-row {
-    margin-bottom: 10px;
-}
-
-#left-button {
-    margin-right: 10px;
-}
-
-#down-button {
-    margin-top: 10px;
-}
-
 #game-over-message {
     color: red;
     font-size: 18px;
     margin-top: 20px;
-}
-
-/* Skor ekranı */
-#scores-screen ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-#scores-screen li {
-    padding: 5px 0;
 }
 
 /* Mobil optimizasyon */
@@ -148,11 +116,6 @@ button:hover {
     button {
         font-size: 14px;
         padding: 8px 16px;
-    }
-
-    #player-name-section input {
-        font-size: 14px;
-        padding: 8px;
     }
 
     #game-info {
