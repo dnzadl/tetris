@@ -3,89 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tetris Game</title>
-    <style>
-        body {
-            background-color: #1E1E1E;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            color: white;
-            font-family: Arial, sans-serif;
-        }
-        #gameContainer {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            border: 2px solid #175DA9;
-            padding: 20px;
-            background-color: #121212;
-            border-radius: 10px;
-        }
-        canvas {
-            border: 2px solid #175DA9;
-            background-color: #000;
-            margin-bottom: 20px;
-        }
-        #controls {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        button {
-            font-size: 20px;
-            margin: 0 10px;
-            background-color: #175DA9;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            width: 50px;
-            height: 50px;
-            cursor: pointer;
-        }
-        #score {
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-        #highScores {
-            font-size: 18px;
-            text-align: center;
-        }
-        #gameOverMessage {
-            font-size: 32px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            display: none;
-        }
-        #restartButton {
-            font-size: 20px;
-            padding: 10px 20px;
-            background-color: #175DA9;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            display: none;
-        }
-    </style>
+    <title>Tetris Oyunu</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="gameContainer">
-        <canvas id="gameCanvas"></canvas>
-        <div id="controls">
-            <button id="leftButton">←</button>
-            <button id="rotateButton">↻</button>
-            <button id="rightButton">→</button>
-            <button id="downButton">↓</button>
+    <div class="game-container">
+        <div id="game-board" class="game-board">
+            <!-- Tetris oyun alanı buraya gelecek -->
         </div>
-        <div id="score">Score: 0</div>
-        <div id="highScores"></div>
-        <div id="gameOverMessage"></div>
-        <button id="restartButton" onclick="restartGame()">Restart</button>
+        <div class="score-container">
+            <h2>Skor</h2>
+            <div id="score">0</div>
+            <h3>Son 3 Skor</h3>
+            <ul id="last-scores">
+                <!-- Son 3 skorlar buraya eklenecek -->
+            </ul>
+        </div>
     </div>
-
     <script src="tetris.js"></script>
 </body>
 </html>
