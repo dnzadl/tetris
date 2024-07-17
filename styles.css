@@ -48,20 +48,21 @@ button:hover {
 /* Oyun alanı */
 #game-container {
     position: relative;
-    width: 100%;
-    max-width: 600px;
-    margin: auto;
-    text-align: center;
+    width: 360px; /* Instagram gönderi boyutunda */
+    height: 360px; /* Instagram gönderi boyutunda */
+    border: 2px solid #333; /* Oyun alanına çerçeve ekleme */
+    box-sizing: border-box;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background: white;
 }
 
 #game-area {
-    position: relative;
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    height: 80vh; /* Oyun alanını %30 küçültme */
-    max-width: 600px;
-    margin: auto;
-    border: 2px solid #333; /* Oyun alanına çerçeve ekleme */
-    box-sizing: border-box;
+    height: 100%;
 }
 
 #tetris-board {
@@ -75,14 +76,12 @@ button:hover {
 
 /* Kontroller */
 #controls {
-    position: fixed;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    width: 250px;
+    flex-direction: column;
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    width: auto;
 }
 
 .control-button {
@@ -90,13 +89,31 @@ button:hover {
     margin: 5px;
     padding: 15px;
     font-size: 18px;
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%; /* Yuvarlak buton */
+    border: none;
 }
 
 .control-button:hover {
     background-color: #218838;
+}
+
+/* Yön tuşları */
+#left-button {
+    margin-bottom: 10px;
+}
+
+#rotate-button {
+    margin-bottom: 10px;
+}
+
+#right-button {
+    margin-bottom: 10px;
+}
+
+#down-button {
+    margin-bottom: 10px;
 }
 
 #game-over-message {
@@ -137,8 +154,8 @@ button:hover {
 
     .control-button {
         font-size: 14px;
-        width: 40px;
-        height: 40px;
+        width: 50px;
+        height: 50px;
         padding: 8px;
     }
 }
