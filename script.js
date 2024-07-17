@@ -5,9 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const highScoresList = document.getElementById('highScores');
     const gameOverMessage = document.getElementById('gameOverMessage');
     const restartButton = document.getElementById('restartButton');
-    const blockBreakSound = document.getElementById('blockBreakSound');
-    const winSound = document.getElementById('winSound');
-    const loseSound = document.getElementById('loseSound');
 
     const screenWidth = window.innerWidth;
     const screenHeight = window.innerHeight;
@@ -96,7 +93,6 @@ document.addEventListener('DOMContentLoaded', () => {
             updateScore();
             if (score >= 2000) {
                 gameOver = true;
-                winSound.play();
                 gameOverMessage.textContent = 'Helal Sana Beah!';
                 gameOverMessage.style.display = 'block';
                 restartButton.style.display = 'block';
@@ -106,7 +102,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 piece = randomPiece();
                 if (collide(grid, piece)) {
                     gameOver = true;
-                    loseSound.play();
                     gameOverMessage.textContent = 'Başaramadın!';
                     gameOverMessage.style.display = 'block';
                     restartButton.style.display = 'block';
@@ -165,9 +160,6 @@ document.addEventListener('DOMContentLoaded', () => {
             grid.unshift(row);
             lines++;
             y++;
-        }
-        if (lines > 0) {
-            blockBreakSound.play();
         }
         return lines;
     }
