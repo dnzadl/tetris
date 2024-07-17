@@ -41,8 +41,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const square = document.createElement('div');
                 square.style.backgroundColor = board[rowIndex][colIndex];
                 square.style.border = '1px solid #333';
-                square.style.width = 'calc(100% / 10)';
-                square.style.height = 'calc(100% / 20)';
+                square.style.width = '30px';
+                square.style.height = '30px';
                 grid.appendChild(square);
             });
         });
