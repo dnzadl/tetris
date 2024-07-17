@@ -13,6 +13,7 @@ body {
 
 #game-container {
     display: none;
+    text-align: center;
 }
 
 #tetris-board {
