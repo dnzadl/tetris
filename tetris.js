@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const grid = document.getElementById('game-board');
     const scoreDisplay = document.getElementById('score');
     const lastScoresList = document.getElementById('last-scores');
+    const startButton = document.getElementById('start-button');
     const ROWS = 20;
     const COLS = 10;
     const EMPTY = 'white';
@@ -126,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateScore();
         init();
         drawBoard();
-        startGame();
+        startButton.disabled = false; // Enable start button
     }
 
     // Update score display
@@ -155,6 +156,12 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (e.key === 'ArrowUp') {
             rotateShape();
         }
+    });
+
+    // Add click event for start button
+    startButton.addEventListener('click', () => {
+        startGame();
+        startButton.disabled = true; // Disable start button once game starts
     });
 
     // Initialize the game
@@ -204,5 +211,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Display last 3 scores initially
+    displayLastScores();
+
+    // Start the game initially
     startGame();
 });
