@@ -18,6 +18,11 @@ body {
 #tetris-board {
     border: 2px solid #000;
     background-color: #eee;
+    display: block;
+    width: 100%;
+    max-width: 360px; /* Mobil uyumluluk için genişliği ayarlayın */
+    height: auto;
+    aspect-ratio: 1; /* Oyun tahtasının kare şeklinde kalmasını sağlar */
 }
 
 #start-screen, #scores-screen, #player-name-section {
@@ -29,6 +34,15 @@ button {
     margin: 5px;
     padding: 10px 20px;
     font-size: 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
 }
 
 #player-name-section {
@@ -40,4 +54,10 @@ button {
     font-size: 24px;
     font-weight: bold;
     color: red;
+}
+
+#score {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 10px 0;
 }
