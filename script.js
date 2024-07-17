@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let startX, startY;
     let playerName = localStorage.getItem('playerName') || '';
     const savedScores = JSON.parse(localStorage.getItem('tetrisScores')) || [];
+    let gameStarted = false;
 
     canvas.width = COLS * BLOCK_SIZE;
     canvas.height = ROWS * BLOCK_SIZE;
@@ -134,7 +135,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 board.unshift(Array(COLS).fill(0));
                 score += 100;
                 updateScore();
-                y++;
             }
         }
     }
@@ -143,44 +143,48 @@ document.addEventListener('DOMContentLoaded', () => {
         scoreElement.textContent = `Score: ${score}`;
     }
 
-    function drawGame() {
-        drawBoard();
-        drawPiece(currentPiece, currentPiece.x, currentPiece.y, COLORS[currentPiece.color - 1]);
-    }
-
     function newPiece() {
         currentPiece = { ...generatePiece(), x: Math.floor(COLS / 2) - 1, y: 0 };
         if (!isValidPosition(currentPiece)) {
             gameOver();
         }
-        drawGame();
+    }
+
+    function drawGame() {
+        drawBoard();
+        drawPiece(currentPiece, currentPiece.x, currentPiece.y, COLORS[currentPiece.color - 1]);
     }
 
     function gameOver() {
         clearInterval(intervalId);
-        gameOverMessage.textContent = score >= 2000 ? 'Tebrikler Başardınız!' : 'Üzgünüm Yeterli Değilsiniz';
+        gameOverMessage.textContent = score >= 2000 ? 'Congratulations! You won!' : 'Game Over. Better luck next time!';
         gameOverMessage.style.display = 'block';
         saveScore();
+        gameStarted = false;
         setTimeout(showStartScreen, 3000);
     }
 
     function saveScore() {
-        savedScores.push({ name: playerName, score });
-        savedScores.sort((a, b) => b.score - a.score);
-        if (savedScores.length > 5) {
-            savedScores.pop();
+        if (playerName) {
+            savedScores.push({ name: playerName, score });
+            savedScores.sort((a, b) => b.score - a.score);
+            if (savedScores.length > 5) {
+                savedScores.pop();
+            }
+            localStorage.setItem('tetrisScores', JSON.stringify(savedScores));
         }
-        localStorage.setItem('tetrisScores', JSON.stringify(savedScores));
     }
 
     function startGame() {
+        if (gameStarted) return;
         score = 0;
         updateScore();
         board = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
         newPiece();
         gameOverMessage.style.display = 'none';
         gameContainer.style.display = 'block';
-        intervalId = setInterval(() => movePiece(0, 1), 200); // Speed: Adjust this for game speed
+        intervalId = setInterval(() => movePiece(0, 1), 240); // Speed: Adjust this for game speed (20% slower)
+        gameStarted = true;
     }
 
     function showStartScreen() {
@@ -246,11 +250,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     startButton.addEventListener('click', () => {
-        if (playerNameInput.value) {
-            playerName = playerNameInput.value;
-            localStorage.setItem('playerName', playerName);
-            playerNameSection.style.display = 'none';
+        if (!gameStarted && playerName) {
             startGame();
+        } else if (!playerName) {
+            playerNameSection.style.display = 'block';
         }
     });
 
