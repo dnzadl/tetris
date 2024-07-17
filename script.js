@@ -3,217 +3,84 @@
 document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('tetris-board');
     const ctx = canvas.getContext('2d');
-    const startButton = document.getElementById('start-button');
-    const scoresButton = document.getElementById('scores-button');
-    const restartButton = document.getElementById('restart-button');
-    const backButton = document.getElementById('back-button');
-    const backToStartButton = document.getElementById('back-to-start-button');
-    const saveNameButton = document.getElementById('save-name');
-    const playerNameInput = document.getElementById('player-name');
-    const gameOverMessage = document.getElementById('game-over-message');
-    const scoreDisplay = document.getElementById('score');
-    const gameArea = document.getElementById('game-area');
-    const controls = document.getElementById('controls');
+    const width = 120; // %30 küçültülmüş boyut
+    const height = 210; // %30 küçültülmüş boyut
+    canvas.width = width;
+    canvas.height = height;
 
-    let game;
-    let playerName = '';
+    // Oyun ayarları
+    const grid = 30;
+    let gameInterval;
+    let isGameOver = false;
 
-    function initializeGame() {
-        canvas.width = 240; // Oyun alanını daha küçük yapıyoruz
-        canvas.height = 400;
-        game = new Tetris(ctx, canvas);
-        updateScore(0);
-        gameOverMessage.textContent = '';
-        game.start();
-    }
+    // Taşlar, skor ve oyun durumu
+    const pieces = [/* Tetris taşları tanımlamaları */];
+    let piece;
+    let score = 0;
+    let level = 1;
+    let lines = 0;
 
-    function updateScore(score) {
-        scoreDisplay.textContent = `Score: ${score}`;
-    }
-
+    // Başlangıç fonksiyonu
     function startGame() {
-        document.getElementById('start-screen').style.display = 'none';
-        document.getElementById('player-name-section').style.display = 'none';
-        document.getElementById('game-container').style.display = 'block';
-        document.getElementById('scores-screen').style.display = 'none';
-        initializeGame();
+        if (gameInterval) clearInterval(gameInterval);
+        isGameOver = false;
+        score = 0;
+        level = 1;
+        lines = 0;
+        document.getElementById('score').innerText = 'Score: 0';
+        document.getElementById('level').innerText = 'Level: 1';
+        document.getElementById('lines').innerText = 'Lines: 0';
+        drawBoard();
+        gameInterval = setInterval(gameLoop, 1000 / level);
     }
 
-    function showScores() {
-        document.getElementById('start-screen').style.display = 'none';
-        document.getElementById('player-name-section').style.display = 'none';
-        document.getElementById('game-container').style.display = 'none';
-        document.getElementById('scores-screen').style.display = 'block';
+    // Oyun döngüsü
+    function gameLoop() {
+        if (isGameOver) {
+            clearInterval(gameInterval);
+            document.getElementById('game-over-message').innerText = 'Game Over';
+            return;
+        }
+
+        // Oyun mantığı ve taş hareketleri burada
     }
 
-    function showStartScreen() {
-        document.getElementById('start-screen').style.display = 'block';
-        document.getElementById('player-name-section').style.display = 'none';
-        document.getElementById('game-container').style.display = 'none';
-        document.getElementById('scores-screen').style.display = 'none';
+    // Tahtayı çizme fonksiyonu
+    function drawBoard() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // Tahtayı ve taşları çizme kodları burada
     }
 
-    function handleRotate() {
-        if (game) game.rotate();
-    }
+    // Tuş olayları
+    document.getElementById('start-button').addEventListener('click', startGame);
+    document.getElementById('rotate-button').addEventListener('click', () => {
+        // Taşı döndürme kodu burada
+    });
+    document.getElementById('left-button').addEventListener('click', () => {
+        // Taşı sola hareket ettirme kodu burada
+    });
+    document.getElementById('right-button').addEventListener('click', () => {
+        // Taşı sağa hareket ettirme kodu burada
+    });
+    document.getElementById('down-button').addEventListener('click', () => {
+        // Taşı aşağı hareket ettirme kodu burada
+    });
 
-    function handleMoveLeft() {
-        if (game) game.moveLeft();
-    }
-
-    function handleMoveRight() {
-        if (game) game.moveRight();
-    }
-
-    function handleMoveDown() {
-        if (game) game.moveDown();
-    }
-
-    function restartGame() {
-        game.restart();
-        updateScore(0);
-        gameOverMessage.textContent = '';
-    }
-
-    function handleSaveName() {
-        playerName = playerNameInput.value;
-        localStorage.setItem('playerName', playerName);
-        startGame();
-    }
-
-    // Event listeners
-    startButton.addEventListener('click', startGame);
-    scoresButton.addEventListener('click', showScores);
-    restartButton.addEventListener('click', restartGame);
-    backButton.addEventListener('click', showStartScreen);
-    backToStartButton.addEventListener('click', showStartScreen);
-    saveNameButton.addEventListener('click', handleSaveName);
-
-    // Keyboard controls
+    // Klavye olayları
     document.addEventListener('keydown', (event) => {
-        switch (event.code) {
+        switch (event.key) {
             case 'ArrowLeft':
-                handleMoveLeft();
+                // Taşı sola hareket ettirme kodu burada
                 break;
             case 'ArrowRight':
-                handleMoveRight();
+                // Taşı sağa hareket ettirme kodu burada
                 break;
             case 'ArrowDown':
-                handleMoveDown();
+                // Taşı aşağı hareket ettirme kodu burada
                 break;
             case 'ArrowUp':
-                handleRotate();
+                // Taşı döndürme kodu burada
                 break;
         }
     });
-
-    // Mobile controls
-    document.getElementById('rotate-button').addEventListener('click', handleRotate);
-    document.getElementById('left-button').addEventListener('click', handleMoveLeft);
-    document.getElementById('right-button').addEventListener('click', handleMoveRight);
-    document.getElementById('down-button').addEventListener('click', handleMoveDown);
-
-    // Tetris game class
-    class Tetris {
-        constructor(ctx, canvas) {
-            this.ctx = ctx;
-            this.canvas = canvas;
-            this.width = canvas.width;
-            this.height = canvas.height;
-            this.score = 0;
-            this.gameOver = false;
-            this.init();
-        }
-
-        init() {
-            this.board = this.createEmptyBoard();
-            this.currentPiece = this.randomPiece();
-            this.draw();
-        }
-
-        createEmptyBoard() {
-            const board = [];
-            for (let row = 0; row < 20; row++) {
-                board[row] = Array(10).fill(0);
-            }
-            return board;
-        }
-
-        randomPiece() {
-            // Define pieces and colors
-            const pieces = [
-                { shape: [[1, 1, 1, 1]], color: 'cyan' }, // I piece
-                { shape: [[1, 1], [1, 1]], color: 'yellow' }, // O piece
-                { shape: [[0, 1, 1], [1, 1, 0]], color: 'purple' }, // S piece
-                { shape: [[1, 1, 0], [0, 1, 1]], color: 'green' }, // Z piece
-                { shape: [[1, 1, 1], [0, 1, 0]], color: 'red' }, // T piece
-                { shape: [[1, 1, 0], [1, 1, 1]], color: 'blue' }, // L piece
-                { shape: [[0, 1, 1], [1, 1, 1]], color: 'orange' } // J piece
-            ];
-            return pieces[Math.floor(Math.random() * pieces.length)];
-        }
-
-        draw() {
-            // Clear the board
-            this.ctx.clearRect(0, 0, this.width, this.height);
-            // Draw the board and the current piece
-            this.drawBoard();
-            this.drawPiece(this.currentPiece, 0, 0);
-        }
-
-        drawBoard() {
-            for (let row = 0; row < this.board.length; row++) {
-                for (let col = 0; col < this.board[row].length; col++) {
-                    if (this.board[row][col]) {
-                        this.ctx.fillStyle = this.board[row][col];
-                        this.ctx.fillRect(col * 30, row * 30, 30, 30);
-                        this.ctx.strokeRect(col * 30, row * 30, 30, 30);
-                    }
-                }
-            }
-        }
-
-        drawPiece(piece, offsetX, offsetY) {
-            this.ctx.fillStyle = piece.color;
-            piece.shape.forEach((row, y) => {
-                row.forEach((value, x) => {
-                    if (value) {
-                        this.ctx.fillRect((offsetX + x) * 30, (offsetY + y) * 30, 30, 30);
-                        this.ctx.strokeRect((offsetX + x) * 30, (offsetY + y) * 30, 30, 30);
-                    }
-                });
-            });
-        }
-
-        rotate() {
-            // Rotate piece
-        }
-
-        moveLeft() {
-            // Move piece left
-        }
-
-        moveRight() {
-            // Move piece right
-        }
-
-        moveDown() {
-            // Move piece down
-        }
-
-        restart() {
-            this.init();
-            this.score = 0;
-            this.updateScore();
-            this.gameOver = false;
-        }
-
-        updateScore() {
-            updateScore(this.score);
-        }
-
-        start() {
-            // Start game logic
-        }
-    }
 });
