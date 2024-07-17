@@ -7,24 +7,24 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="game-container">
+    <div id="start-screen">
+        <button id="start-button">Start Game</button>
+        <button id="scores-button">Scores</button>
+    </div>
+
+    <div id="game-container" style="display: none;">
         <canvas id="tetris-board"></canvas>
         <div id="score">Score: 0</div>
         <div id="game-over-message"></div>
         <button id="restart-button">Restart Game</button>
     </div>
 
-    <div id="start-screen">
-        <button id="start-button">Start Game</button>
-        <button id="scores-button">Scores</button>
-    </div>
-
-    <div id="scores-screen">
+    <div id="scores-screen" style="display: none;">
         <ul id="scores-list"></ul>
         <button id="back-button">Back</button>
     </div>
 
-    <div id="player-name-section">
+    <div id="player-name-section" style="display: none;">
         <input type="text" id="player-name" placeholder="Enter your name">
         <button id="save-name">Save Name</button>
     </div>
