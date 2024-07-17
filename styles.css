@@ -1,31 +1,25 @@
 body {
     display: flex;
-    flex-direction: column;
-    align-items: center;
     justify-content: center;
+    align-items: center;
     height: 100vh;
+    margin: 0;
     background-color: #000;
-    color: #fff;
-    font-family: Arial, sans-serif;
-    overflow: hidden;
-    margin: 0; /* Sayfa kenar boşluklarını sıfırla */
 }
 
 #gameCanvas {
     border: 4px solid #175DA9;
     background-color: #111;
-    max-width: 100%; /* Canvası tam ekran genişliğine sığdırır */
-    max-height: calc(100vh - 200px); /* Canvas yüksekliği ayarlandı */
-    display: block; /* Önceki ayarları geçersiz kılabilir */
-    margin: auto; /* Oyun alanını ortalamak için */
+    display: block;
+    margin: 0; /* Sayfa kenar boşluklarını sıfırla */
+    padding: 0; /* Padding'i sıfırla */
+    box-sizing: border-box; /* Kenarlığı dahil box boyutunu hesapla */
 }
 
 #controls {
     display: flex;
     justify-content: center;
     margin-top: 10px;
-    width: 100%;
-    max-width: 375px; /* Maksimum genişlik */
 }
 
 .control-button {
