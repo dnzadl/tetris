@@ -4,20 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tetris Oyunu</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="game-container">
-        <div id="game-board" class="game-board">
-            <!-- Tetris oyun alanı buraya gelecek -->
-        </div>
-        <div class="score-container">
-            <h2>Skor</h2>
-            <div id="score">0</div>
-            <h3>Son 3 Skor</h3>
-            <ul id="last-scores">
-                <!-- Son 3 skorlar buraya eklenecek -->
-            </ul>
+    <div id="game-container">
+        <div id="game-board"></div>
+        <div id="side-panel">
+            <div id="score-panel">
+                <h2>Skor</h2>
+                <div id="score">0</div>
+            </div>
+            <div id="last-scores-panel">
+                <h2>Son 3 Skor</h2>
+                <ul id="last-scores"></ul>
+            </div>
+            <button id="start-button">Başlat</button>
         </div>
     </div>
     <script src="tetris.js"></script>
