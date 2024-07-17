@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let board = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
     let currentPiece, score = 0;
     let intervalId;
-    let startX, startY;
+    let startX, startY, touchStartX, touchStartY;
     let playerName = localStorage.getItem('playerName') || '';
     const savedScores = JSON.parse(localStorage.getItem('tetrisScores')) || [];
     let gameStarted = false;
@@ -183,7 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
         newPiece();
         gameOverMessage.style.display = 'none';
         gameContainer.style.display = 'block';
-        intervalId = setInterval(() => movePiece(0, 1), 240); // Speed: Adjust this for game speed (20% slower)
+        intervalId = setInterval(() => movePiece(0, 1), 300); // Speed: Adjust this for game speed (20% slower)
         gameStarted = true;
     }
 
@@ -191,6 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
         startScreen.style.display = 'block';
         scoresScreen.style.display = 'none';
         gameContainer.style.display = 'none';
+        gameStarted = false; // Ensure game is not running
     }
 
     function showScoresScreen() {
@@ -223,30 +224,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function handleTouchStart(event) {
         const touch = event.touches[0];
-        startX = touch.clientX;
-        startY = touch.clientY;
+        touchStartX = touch.clientX;
+        touchStartY = touch.clientY;
     }
 
     function handleTouchMove(event) {
         const touch = event.touches[0];
-        const deltaX = touch.clientX - startX;
-        const deltaY = touch.clientY - startY;
+        const deltaX = touch.clientX - touchStartX;
+        const deltaY = touch.clientY - touchStartY;
 
         if (Math.abs(deltaX) > Math.abs(deltaY)) {
             if (deltaX > 30) {
-                movePiece(1, 0); // Sağ hareket
+                movePiece(1, 0); // Right move
             } else if (deltaX < -30) {
-                movePiece(-1, 0); // Sol hareket
+                movePiece(-1, 0); // Left move
             }
         } else {
             if (deltaY > 30) {
-                movePiece(0, 1); // Aşağı hareket
+                movePiece(0, 1); // Down move
             } else if (deltaY < -30) {
-                rotatePiece(); // Döndürme
+                rotatePiece(); // Rotate
             }
         }
-        startX = touch.clientX;
-        startY = touch.clientY;
+        touchStartX = touch.clientX;
+        touchStartY = touch.clientY;
+    }
+
+    function handleTouchEnd(event) {
+        const touch = event.changedTouches[0];
+        const x = Math.floor(touch.clientX / BLOCK_SIZE);
+        const y = Math.floor(touch.clientY / BLOCK_SIZE);
+        if (isValidPosition({...currentPiece, x, y})) {
+            movePiece(0, 1);
+        }
     }
 
     startButton.addEventListener('click', () => {
@@ -276,4 +286,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     canvas.addEventListener('touchstart', handleTouchStart);
     canvas.addEventListener('touchmove', handleTouchMove);
+    canvas.addEventListener('touchend', handleTouchEnd);
 });
