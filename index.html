@@ -14,21 +14,21 @@
             background-color: #000;
             color: #fff;
             font-family: Arial, sans-serif;
-            overflow: hidden; /* Ekran taşmalarını önlemek için eklenen stil */
+            overflow: hidden;
         }
         #gameCanvas {
             border: 4px solid #175DA9;
             background-color: #111;
-            width: 100%; /* Canvas genişliğini % olarak ayarladık */
-            max-width: 375px; /* Maksimum genişlik */
-            max-height: calc(100vh - 250px); /* Maksimum yükseklik (250px kontrol ve skor alanları için) */
+            width: 100%;
+            max-width: 375px;
+            max-height: calc(100vh - 250px);
         }
         #controls {
             display: flex;
             justify-content: center;
             margin-top: 10px;
-            width: 100%; /* Kontrolleri genişliğe göre ayarladık */
-            max-width: 375px; /* Maksimum genişlik */
+            width: 100%;
+            max-width: 375px;
         }
         .control-button {
             width: 50px;
@@ -57,6 +57,21 @@
         #highScores li {
             font-size: 20px;
         }
+        #gameOverMessage {
+            display: none;
+            font-size: 24px;
+            margin-top: 20px;
+        }
+        #restartButton {
+            display: none;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #175DA9;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -66,12 +81,12 @@
         <button id="rotateButton" class="control-button">⤴️</button>
         <button id="rightButton" class="control-button">➡️</button>
     </div>
-    <div id="controls">
-        <button id="downButton" class="control-button">⬇️</button>
-    </div>
+    <div id="downButton" class="control-button">⬇️</div>
     <div id="scoreboard">
         <div>Score: <span id="score">0</span></div>
         <ul id="highScores"></ul>
+        <div id="gameOverMessage"></div>
+        <button id="restartButton">Yeniden Başlat</button>
     </div>
     <audio id="blockBreakSound" src="block-break.mp3"></audio>
     <audio id="winSound" src="win.mp3"></audio>
