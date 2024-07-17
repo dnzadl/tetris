@@ -161,7 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
         playerNameSection.style.display = 'none';
 
         clearInterval(intervalId);
-        intervalId = setInterval(() => movePiece(0, 1), 900); // %20 yavaşlatılmış
+        intervalId = setInterval(() => movePiece(0, 1), 1200); // %20 yavaşlatılmış
     }
 
     function endGame() {
@@ -240,6 +240,24 @@ document.addEventListener('DOMContentLoaded', () => {
         touchStartY = touch.clientY;
     }
 
+    function handleControlClick(direction) {
+        if (!gameStarted) return;
+        switch (direction) {
+            case 'left':
+                movePiece(-1, 0);
+                break;
+            case 'right':
+                movePiece(1, 0);
+                break;
+            case 'down':
+                movePiece(0, 1);
+                break;
+            case 'rotate':
+                rotatePiece();
+                break;
+        }
+    }
+
     startButton.addEventListener('click', startGame);
     restartButton.addEventListener('click', startGame);
     scoresButton.addEventListener('click', showScoresScreen);
@@ -254,4 +272,10 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('keydown', handleKeyDown);
     canvas.addEventListener('touchstart', handleTouchStart);
     canvas.addEventListener('touchmove', handleTouchMove);
+
+    // Mobile controls
+    leftButton.addEventListener('click', () => handleControlClick('left'));
+    rightButton.addEventListener('click', () => handleControlClick('right'));
+    downButton.addEventListener('click', () => handleControlClick('down'));
+    rotateButton.addEventListener('click', () => handleControlClick('rotate'));
 });
