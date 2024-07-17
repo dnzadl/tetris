@@ -14,6 +14,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameContainer = document.getElementById('game-container');
     const playerNameSection = document.getElementById('player-name-section');
     const gameOverMessage = document.getElementById('game-over-message');
+    
+    const leftButton = document.getElementById('left-button');
+    const rightButton = document.getElementById('right-button');
+    const downButton = document.getElementById('down-button');
+    const rotateButton = document.getElementById('rotate-button');
 
     const ROWS = 20;
     const COLS = 10;
@@ -85,37 +90,33 @@ document.addEventListener('DOMContentLoaded', () => {
             currentPiece = newPiece;
             drawGame();
         } else if (dy > 0) {
-            mergePiece(); // Merge piece into board if moved down and invalid
+            lockPiece();
         }
     }
 
     function rotatePiece() {
-        const newPiece = { ...currentPiece, shape: rotateMatrix(currentPiece.shape) };
+        const newShape = currentPiece.shape[0].map((_, i) =>
+            currentPiece.shape.map(row => row[i]).reverse()
+        );
+        const newPiece = { ...currentPiece, shape: newShape };
         if (isValidPosition(newPiece)) {
             currentPiece = newPiece;
             drawGame();
         }
     }
 
-    function rotateMatrix(matrix) {
-        return matrix[0].map((_, i) => matrix.map(row => row[i])).reverse();
-    }
-
     function isValidPosition(piece) {
-        return piece.shape.every((row, y) =>
-            row.every((value, x) =>
-                !value || (
-                    piece.y + y >= 0 &&
-                    piece.x + x >= 0 &&
-                    piece.x + x < COLS &&
-                    piece.y + y < ROWS &&
-                    !board[piece.y + y][piece.x + x]
-                )
-            )
-        );
+        return piece.shape.every((row, y) => {
+            return row.every((value, x) => {
+                const boardX = piece.x + x;
+                const boardY = piece.y + y;
+                return value === 0 ||
+                    (boardX >= 0 && boardX < COLS && boardY < ROWS && board[boardY][boardX] === 0);
+            });
+        });
     }
 
-    function mergePiece() {
+    function lockPiece() {
         currentPiece.shape.forEach((row, y) => {
             row.forEach((value, x) => {
                 if (value) {
@@ -163,7 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
         gameContainer.style.display = 'block';
 
         clearInterval(intervalId);
-        intervalId = setInterval(() => movePiece(0, 1), 600); // Speed: 600ms
+        intervalId = setInterval(() => movePiece(0, 1), 720); // Speed: 720ms (yaklaşık %20 yavaşlatılmış)
     }
 
     function endGame() {
@@ -268,6 +269,12 @@ document.addEventListener('DOMContentLoaded', () => {
     restartButton.addEventListener('click', startGame);
     scoresButton.addEventListener('click', showScoresScreen);
     backButton.addEventListener('click', showStartScreen);
+
+    leftButton.addEventListener('click', () => movePiece(-1, 0));
+    rightButton.addEventListener('click', () => movePiece(1, 0));
+    downButton.addEventListener('click', () => movePiece(0, 1));
+    rotateButton.addEventListener('click', rotatePiece);
+
     document.addEventListener('keydown', handleKeyDown);
     canvas.addEventListener('touchstart', handleTouchStart);
     canvas.addEventListener('touchmove', handleTouchMove);
