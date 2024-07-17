@@ -1,64 +1,43 @@
-body, html {
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
     overflow: hidden;
-    background: #333;
-    color: #fff;
 }
 
 #game-container {
     display: none;
-    position: relative;
-    width: 90vw;
-    height: 90vh;
-    margin: auto;
-    background-color: #222;
-    border: 2px solid #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 #tetris-board {
-    background-color: #000;
-    border: 1px solid #666;
+    border: 2px solid #000;
+    background-color: #eee;
 }
 
 #start-screen, #scores-screen, #player-name-section {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    display: none;
     text-align: center;
-    color: #fff;
 }
 
 button {
-    margin: 10px;
+    margin: 5px;
     padding: 10px 20px;
     font-size: 16px;
-    border: none;
-    border-radius: 5px;
-    background-color: #555;
-    color: #fff;
-    cursor: pointer;
 }
 
-button:hover {
-    background-color: #777;
-}
-
-input {
-    margin: 10px;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #555;
-    border-radius: 5px;
-    background-color: #222;
-    color: #fff;
+#player-name-section {
+    display: block;
 }
 
 #game-over-message {
+    display: none;
     font-size: 24px;
-    margin-top: 20px;
-    color: #ff0000;
+    font-weight: bold;
+    color: red;
 }
