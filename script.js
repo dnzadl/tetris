@@ -5,10 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const highScoresList = document.getElementById('highScores');
     const gameOverMessage = document.getElementById('gameOverMessage');
     const restartButton = document.getElementById('restartButton');
-    const blockBreakSound = new Audio('block_break.wav');
-    const winSound = new Audio('win_sound.wav');
-    const loseSound = new Audio('lose_sound.wav');
-
     const COLS = 10;
     const ROWS = 20;
     const BLOCK_SIZE = 30;
@@ -170,9 +166,6 @@ document.addEventListener('DOMContentLoaded', () => {
             grid.unshift(row);
             lines++;
             y++;
-        }
-        if (lines > 0) {
-            blockBreakSound.play();
         }
         return lines;
     }
