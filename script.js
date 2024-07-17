@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function drawPiece(piece, offsetX, offsetY, color) {
-        piece.forEach((row, y) => {
+        piece.shape.forEach((row, y) => {
             row.forEach((value, x) => {
                 if (value) {
                     drawBlock(x + offsetX, y + offsetY, color);
@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function drawGame() {
         drawBoard();
-        drawPiece(currentPiece.shape, currentPiece.x, currentPiece.y, COLORS[currentPiece.color - 1]);
+        drawPiece(currentPiece, currentPiece.x, currentPiece.y, COLORS[currentPiece.color - 1]);
     }
 
     function newPiece() {
@@ -169,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function saveScore() {
         savedScores.push(score);
         savedScores.sort((a, b) => b - a);
-        savedScores.splice(5);
+        savedScores.splice(5); // Keep top 5 scores
         localStorage.setItem('tetrisScores', JSON.stringify(savedScores));
         showScoresScreen();
     }
@@ -192,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
         score = 0;
         updateScore();
         newPiece();
-        intervalId = setInterval(() => movePiece(0, 1), 11); // Oyun hızını 11 ms olarak ayarladık
+        intervalId = setInterval(() => movePiece(0, 1), 100); // 3 kat hızlandırılmış hız, 100 ms olarak ayarlandı
         gameContainer.style.display = 'block';
         startScreen.style.display = 'none';
         scoresScreen.style.display = 'none';
@@ -236,35 +236,37 @@ document.addEventListener('DOMContentLoaded', () => {
             if (deltaY > 30) {
                 movePiece(0, 1); // Aşağı hareket
             } else if (deltaY < -30) {
-                rotatePiece(); // Dönme
+                rotatePiece(); // Döndürme
             }
         }
-
-        event.preventDefault();
     }
 
-    function handleTouchEnd(event) {
-        // Function intentionally left empty
-    }
+    startButton.addEventListener('click', () => {
+        if (playerNameInput.value) {
+            playerName = playerNameInput.value;
+            localStorage.setItem('playerName', playerName);
+            playerNameSection.style.display = 'none';
+            startGame();
+        }
+    });
 
-    // Event listeners
-    startButton.addEventListener('click', startGame);
-    restartButton.addEventListener('click', startGame);
-    scoresButton.addEventListener('click', showScoresScreen);
-    backButton.addEventListener('click', showStartScreen);
     saveNameButton.addEventListener('click', () => {
-        const name = playerNameInput.value.trim();
-        if (name) {
-            localStorage.setItem('playerName', name);
-            playerName = name;
+        if (playerNameInput.value) {
+            playerName = playerNameInput.value;
+            localStorage.setItem('playerName', playerName);
             playerNameSection.style.display = 'none';
             showStartScreen();
         }
     });
 
-    canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
-    canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
-    canvas.addEventListener('touchend', handleTouchEnd, { passive: false });
+    restartButton.addEventListener('click', startGame);
+
+    scoresButton.addEventListener('click', showScoresScreen);
+
+    backButton.addEventListener('click', showStartScreen);
 
     document.addEventListener('keydown', handleKeyDown);
+
+    canvas.addEventListener('touchstart', handleTouchStart);
+    canvas.addEventListener('touchmove', handleTouchMove);
 });
